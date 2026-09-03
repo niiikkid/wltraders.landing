@@ -370,6 +370,52 @@
     .screen-stage { position: relative; aspect-ratio: 1600 / 776; overflow: hidden; border-radius: 2px; background: #08090c; cursor: pointer; }
     .screen-stage img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: top; opacity: 0; transition: opacity .85s ease; filter: grayscale(0.72) contrast(1.06) brightness(1.02); }
     .screen-stage img.active { opacity: 1; }
+
+    /* Help / contact */
+    .nav-links a.nav-help {
+      margin-left: 4px;
+      padding: 8px 17px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      color: var(--ink);
+      font-family: var(--display);
+      font-size: 12px;
+      font-weight: 400;
+      letter-spacing: .09em;
+      text-transform: uppercase;
+      transition: background .2s ease, border-color .2s ease, color .2s ease;
+    }
+    .nav-links a.nav-help:hover { color: #000; background: var(--ink); border-color: var(--ink); }
+
+    .help { padding: 140px 0 130px; background: #020203; border-top: 1px solid var(--line); }
+    .help-card { display: grid; grid-template-columns: 1.15fr .85fr; gap: 80px; align-items: center; }
+    .help-copy h2 { margin-top: 22px; font-size: clamp(40px, 5vw, 66px); line-height: 1.02; letter-spacing: -.045em; font-weight: 300; }
+    .help-copy > p { margin: 24px 0 0; max-width: 620px; color: var(--muted); font-size: 18px; }
+    .help-actions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 34px; }
+    .help-contact {
+      display: block;
+      padding: 36px 34px;
+      border: 1px solid var(--line);
+      border-radius: 2px;
+      background: rgba(240, 240, 250, .025);
+      transition: border-color .2s ease, background .2s ease;
+    }
+    .help-contact:hover { border-color: rgba(240,240,250,.4); background: rgba(240,240,250,.05); }
+    .help-contact .label { display: block; color: var(--muted); font-family: var(--display); font-size: 12px; letter-spacing: .16em; text-transform: uppercase; }
+    .help-contact .handle { display: flex; align-items: center; gap: 13px; margin-top: 20px; font-family: var(--display); font-size: 32px; letter-spacing: -.02em; }
+    .help-contact .handle svg { width: 30px; height: 30px; color: var(--ink); flex: none; }
+    .help-contact p { margin: 18px 0 0; color: var(--muted); font-size: 14.5px; }
+
+    @media (max-width: 980px) {
+      .help-card { grid-template-columns: 1fr; gap: 42px; }
+      .help-contact { max-width: 540px; }
+    }
+    @media (max-width: 760px) {
+      .nav-links a.nav-help { margin: 0; padding: 0 12px; border: 0; border-radius: 0; font-family: var(--body); font-size: 16px; letter-spacing: 0; text-transform: none; }
+      .nav-links a.nav-help:hover { background: transparent; color: var(--ink); }
+      .help { padding: 84px 0; }
+      .help-contact .handle { font-size: 26px; }
+    }
   </style>
   <script type="application/ld+json">
   {
@@ -396,6 +442,7 @@
         <a href="#capabilities">Возможности</a>
         <a href="#flow">Как работает</a>
         <a href="#opensource">Исходный код</a>
+        <a href="#help" class="nav-help">Нужна помощь</a>
       </nav>
       <a class="github-link" href="https://github.com/niiikkid/p2p.processing.traders" target="_blank" rel="noreferrer">
         GitHub <span aria-hidden="true">↗</span>
@@ -548,12 +595,33 @@
         </div>
       </div>
     </section>
+
+    <section class="help" id="help">
+      <div class="container help-card">
+        <div class="help-copy reveal">
+          <span class="eyebrow">Нужна помощь?</span>
+          <h2>Есть идеи, замечания или предложения</h2>
+          <p>Нужна помощь с запуском или настройкой, есть замечания по продукту или идеи, как сделать лучше — напишите напрямую в Telegram.</p>
+          <div class="help-actions">
+            <a class="button primary" href="https://t.me/n1kkid" target="_blank" rel="noreferrer">Написать в Telegram <span aria-hidden="true">↗</span></a>
+          </div>
+        </div>
+        <a class="help-contact reveal" href="https://t.me/n1kkid" target="_blank" rel="noreferrer">
+          <span class="label">Telegram</span>
+          <span class="handle">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z" fill="currentColor"/></svg>
+            <span>@n1kkid</span>
+          </span>
+          <p>Нужна помощь, есть идеи, замечания или предложения — напишите.</p>
+        </a>
+      </div>
+    </section>
   </main>
 
   <footer>
     <div class="container footer-row">
       <div>WLTraders · Open source P2P processing platform</div>
-      <div class="footer-links"><a href="#top">Наверх ↑</a><a href="https://github.com/niiikkid/p2p.processing.traders" target="_blank" rel="noreferrer">GitHub ↗</a></div>
+      <div class="footer-links"><a href="#top">Наверх ↑</a><a href="#help">Нужна помощь</a><a href="https://github.com/niiikkid/p2p.processing.traders" target="_blank" rel="noreferrer">GitHub ↗</a></div>
     </div>
   </footer>
 
