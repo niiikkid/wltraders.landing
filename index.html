@@ -8,10 +8,14 @@
   <meta name="keywords" content="P2P процессинг, P2P платформа, платформа для трейдеров, платформа для мерчантов, P2P acquiring, P2P payment processing, self-hosted payment platform, merchant API, выплаты, USDT processing">
   <meta name="theme-color" content="#000000">
   <meta property="og:type" content="website">
+  <meta property="og:site_name" content="WLTraders">
+  <meta property="og:locale" content="ru_RU">
   <meta property="og:title" content="WLTraders — своя P2P-площадка на своих правилах">
   <meta property="og:description" content="Open source основа для запуска P2P-процессинга: мерчанты, трейдеры, сделки, выплаты, споры и расчёты в одной системе.">
 
   <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="WLTraders — своя P2P-площадка на своих правилах">
+  <meta name="twitter:description" content="Open source основа для запуска P2P-процессинга: мерчанты, трейдеры, сделки, выплаты, споры и расчёты в одной системе.">
 
   <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 64 64%22><rect width=%2264%22 height=%2264%22 rx=%2212%22 fill=%22%23000000%22/><path d=%22M13 18h8l6 25 5-18h7l5 18 5-25h8L49 49H40l-5-16-5 16h-9z%22 fill=%22%23f0f0fa%22/></svg>">
   <style>
@@ -115,6 +119,28 @@
     h1 span { color: var(--accent); }
     .hero-copy > p { max-width: 620px; margin: 30px 0 0; color: #bdc6b7; font-size: clamp(18px, 2vw, 21px); line-height: 1.55; text-wrap: pretty; }
     .hero-actions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 36px; }
+    .demo-access {
+      width: fit-content;
+      max-width: 100%;
+      display: flex;
+      align-items: center;
+      gap: 18px;
+      margin-top: 18px;
+      padding: 11px 14px;
+      border: 1px solid var(--line);
+      background: rgba(240, 240, 250, .025);
+      color: var(--muted);
+      font-size: 12px;
+    }
+    .demo-access > span:first-child {
+      color: var(--ink);
+      font-family: var(--display);
+      letter-spacing: .1em;
+      text-transform: uppercase;
+    }
+    .demo-credential { display: inline-flex; align-items: baseline; gap: 7px; }
+    .demo-credential small { color: var(--muted); font-size: 11px; }
+    .demo-credential code { color: var(--ink); font: 12px/1 var(--display); }
     .hero-note { display: flex; gap: 22px; margin-top: 42px; color: var(--muted); font-size: 13px; }
     .hero-note span { display: flex; align-items: center; gap: 8px; }
     .hero-note span::before { content: "✓"; color: var(--accent); font-weight: 800; }
@@ -185,6 +211,7 @@
 
     .open-source { background: var(--accent); color: var(--accent-ink); }
     .open-grid { display: grid; grid-template-columns: 1.15fr .85fr; gap: 80px; align-items: end; }
+    .open-grid > * { min-width: 0; }
     .open-source .eyebrow { color: #345326; }
     .open-source .eyebrow::before { background: #345326; box-shadow: 0 0 0 5px rgba(52,83,38,.12); }
     .open-source h2 { margin-top: 22px; max-width: 800px; font-size: clamp(46px, 6vw, 82px); line-height: .98; letter-spacing: -.055em; font-weight: 650; }
@@ -231,15 +258,16 @@
       .flow-node { min-height: 150px; }
     }
 
-    @media (max-width: 760px) {
+    @media (max-width: 900px) {
       body { font-size: 16px; }
       .container { width: min(calc(100% - 28px), var(--max)); }
       .nav-links { position: absolute; left: 14px; right: 14px; top: 72px; display: none; padding: 16px; flex-direction: column; align-items: stretch; gap: 4px; border: 1px solid var(--line); border-radius: 18px; background: #171b15; box-shadow: 0 20px 50px rgba(0,0,0,.35); }
       .nav-links.open { display: flex; }
       .nav-links a { min-height: 46px; display: flex; align-items: center; padding: 0 12px; }
 
-      .nav .github-link { display: none; }
-      .menu-button { display: grid; place-items: center; }
+      .nav { gap: 10px; }
+      .nav .demo-link { min-height: 42px; padding: 0 13px; font-size: 11px; }
+      .menu-button { display: grid; place-items: center; flex: none; }
       .hero { padding: 66px 0 60px; }
       h1 { font-size: clamp(43px, 12.5vw, 56px); }
       .hero-copy > p { font-size: 18px; }
@@ -256,6 +284,10 @@
       .open-grid { gap: 45px; }
       .code-note { padding: 18px; }
       .footer-row { align-items: flex-start; flex-direction: column; }
+    }
+
+    @media (max-width: 420px) {
+      .brand > span:last-child { display: none; }
     }
 
     @media (prefers-reduced-motion: reduce) {
@@ -358,13 +390,15 @@
 
     .reveal { opacity: 1; transform: none; }
 
-    @media (max-width: 760px) {
+    @media (max-width: 900px) {
       .nav-links { border-radius: 2px; background: #08090c; box-shadow: none; }
       .hero { min-height: auto; padding: 80px 0 86px; }
       .hero::before { width: 620px; right: -470px; }
       .hero::after { right: 11%; }
       h1 { font-size: clamp(42px, 12vw, 54px); letter-spacing: -.07em; }
       .hero-actions .button { width: 100%; }
+      .demo-access { width: 100%; align-items: flex-start; flex-wrap: wrap; gap: 7px 16px; }
+      .demo-access > span:first-child { width: 100%; }
       .audience-card { border-radius: 2px; }
     }
 
@@ -376,9 +410,27 @@
       .hero-note { margin-top: auto; padding-top: 20px; }
     }
     .screen-viewer { position: relative; width: 100%; padding: 10px; border: 1px solid var(--line); border-radius: 2px; background: rgba(240, 240, 250, .025); display: flex; flex-direction: column; justify-content: center; }
-    .screen-stage { position: relative; aspect-ratio: 1600 / 776; overflow: hidden; border-radius: 2px; background: #08090c; cursor: pointer; }
+    .screen-stage { position: relative; width: 100%; aspect-ratio: 1600 / 776; overflow: hidden; padding: 0; border: 0; border-radius: 2px; color: inherit; background: #08090c; cursor: pointer; text-align: initial; }
     .screen-stage img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: top; opacity: 0; transition: opacity .85s ease; filter: grayscale(0.72) contrast(1.06) brightness(1.02); }
     .screen-stage img.active { opacity: 1; }
+    .screen-toggle {
+      position: absolute;
+      z-index: 2;
+      right: 18px;
+      bottom: 18px;
+      min-height: 38px;
+      padding: 0 13px;
+      border: 1px solid rgba(240,240,250,.28);
+      border-radius: 2px;
+      color: var(--ink);
+      background: rgba(0,0,0,.72);
+      backdrop-filter: blur(10px);
+      font: 11px/1 var(--display);
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      cursor: pointer;
+    }
+    .screen-toggle:hover { background: rgba(240,240,250,.14); border-color: rgba(240,240,250,.5); }
 
     /* Help / contact */
     .nav-links a.nav-help {
@@ -419,7 +471,7 @@
       .help-card { grid-template-columns: 1fr; gap: 42px; }
       .help-contact { max-width: 540px; }
     }
-    @media (max-width: 760px) {
+    @media (max-width: 900px) {
       .nav-links a.nav-help { margin: 0; padding: 0 12px; border: 0; border-radius: 0; font-family: var(--body); font-size: 16px; letter-spacing: 0; text-transform: none; }
       .nav-links a.nav-help:hover { background: transparent; color: var(--ink); }
       .help { padding: 84px 0; }
@@ -435,7 +487,8 @@
     "operatingSystem": "Self-hosted",
     "description": "Open source P2P payment processing platform for merchants and traders.",
     "url": "https://github.com/niiikkid/p2p.processing.traders",
-    "codeRepository": "https://github.com/niiikkid/p2p.processing.traders"
+    "codeRepository": "https://github.com/niiikkid/p2p.processing.traders",
+    "isAccessibleForFree": true
   }
   </script>
 </head>
@@ -453,8 +506,8 @@
         <a href="#opensource">Исходный код</a>
         <a href="#help" class="nav-help">Нужна помощь</a>
       </nav>
-      <a class="github-link" href="https://github.com/niiikkid/p2p.processing.traders" target="_blank" rel="noreferrer">
-        GitHub <span aria-hidden="true">↗</span>
+      <a class="github-link demo-link" href="https://demo.wltraders.pro/" target="_blank" rel="noopener noreferrer">
+        Открыть демо <span aria-hidden="true">↗</span>
       </a>
       <button class="menu-button" type="button" aria-label="Открыть меню" aria-expanded="false" aria-controls="nav-links">☰</button>
     </div>
@@ -477,8 +530,13 @@
               <li>Споры, реквизиты и H2H API</li>
             </ul>
             <div class="hero-actions">
-              <a class="button primary" href="https://github.com/niiikkid/p2p.processing.traders" target="_blank" rel="noreferrer">Исходный код <span aria-hidden="true">↗</span></a>
-              <a class="button" href="#capabilities">Что уже есть внутри</a>
+              <a class="button primary" href="https://demo.wltraders.pro/" target="_blank" rel="noopener noreferrer">Посмотреть демо <span aria-hidden="true">↗</span></a>
+              <a class="button" href="https://github.com/niiikkid/p2p.processing.traders" target="_blank" rel="noopener noreferrer">Исходный код <span aria-hidden="true">↗</span></a>
+            </div>
+            <div class="demo-access" aria-label="Данные для входа в демо-версию">
+              <span>Демо-доступ</span>
+              <span class="demo-credential"><small>Логин</small><code>admin</code></span>
+              <span class="demo-credential"><small>Пароль</small><code>password</code></span>
             </div>
             <div class="hero-note" aria-label="Ключевые свойства">
               <span>На своём сервере</span>
@@ -486,19 +544,20 @@
             </div>
           </div>
 
-          <div class="screen-viewer" role="img" aria-label="Скриншоты интерфейса WLTraders">
-            <div class="screen-stage">
-              <img src="assets/screens/1.jpg" alt="" width="1600" height="776" class="active" decoding="async">
-              <img src="assets/screens/2.jpg" alt="" width="1600" height="776" decoding="async">
-              <img src="assets/screens/3.jpg" alt="" width="1600" height="776" decoding="async">
-              <img src="assets/screens/4.jpg" alt="" width="1600" height="776" decoding="async">
-              <img src="assets/screens/5.jpg" alt="" width="1600" height="776" decoding="async">
-              <img src="assets/screens/6.jpg" alt="" width="1600" height="776" decoding="async">
-              <img src="assets/screens/7.jpg" alt="" width="1600" height="776" decoding="async">
-              <img src="assets/screens/8.jpg" alt="" width="1600" height="776" decoding="async">
-              <img src="assets/screens/9.jpg" alt="" width="1600" height="776" decoding="async">
-              <img src="assets/screens/10.jpg" alt="" width="1600" height="776" decoding="async">
-            </div>
+          <div class="screen-viewer" role="group" aria-label="Скриншоты интерфейса WLTraders">
+            <button class="screen-stage" type="button" aria-label="Показать следующий скриншот интерфейса">
+              <img src="assets/screens/1.jpg" alt="Панель управления WLTraders" width="1600" height="776" class="active" decoding="async" fetchpriority="high" aria-hidden="false">
+              <img src="assets/screens/2.jpg" alt="Интерфейс WLTraders — экран 2" width="1600" height="776" loading="lazy" decoding="async" aria-hidden="true">
+              <img src="assets/screens/3.jpg" alt="Интерфейс WLTraders — экран 3" width="1600" height="776" loading="lazy" decoding="async" aria-hidden="true">
+              <img src="assets/screens/4.jpg" alt="Интерфейс WLTraders — экран 4" width="1600" height="776" loading="lazy" decoding="async" aria-hidden="true">
+              <img src="assets/screens/5.jpg" alt="Интерфейс WLTraders — экран 5" width="1600" height="776" loading="lazy" decoding="async" aria-hidden="true">
+              <img src="assets/screens/6.jpg" alt="Интерфейс WLTraders — экран 6" width="1600" height="776" loading="lazy" decoding="async" aria-hidden="true">
+              <img src="assets/screens/7.jpg" alt="Интерфейс WLTraders — экран 7" width="1600" height="776" loading="lazy" decoding="async" aria-hidden="true">
+              <img src="assets/screens/8.jpg" alt="Интерфейс WLTraders — экран 8" width="1600" height="776" loading="lazy" decoding="async" aria-hidden="true">
+              <img src="assets/screens/9.jpg" alt="Интерфейс WLTraders — экран 9" width="1600" height="776" loading="lazy" decoding="async" aria-hidden="true">
+              <img src="assets/screens/10.jpg" alt="Интерфейс WLTraders — экран 10" width="1600" height="776" loading="lazy" decoding="async" aria-hidden="true">
+            </button>
+            <button class="screen-toggle" type="button">Пауза</button>
           </div>
         </div>
       </div>
@@ -584,7 +643,7 @@
           <span class="eyebrow">Open source</span>
           <h2>Берите основу. Собирайте свою площадку.</h2>
           <p>Изучайте устройство системы, разворачивайте её в своей инфраструктуре и адаптируйте процессы под собственную команду и рынок.</p>
-          <div class="hero-actions"><a class="button" href="https://github.com/niiikkid/p2p.processing.traders" target="_blank" rel="noreferrer">Открыть репозиторий на GitHub <span aria-hidden="true">↗</span></a></div>
+          <div class="hero-actions"><a class="button" href="https://github.com/niiikkid/p2p.processing.traders" target="_blank" rel="noopener noreferrer">Открыть репозиторий на GitHub <span aria-hidden="true">↗</span></a></div>
         </div>
         <aside class="code-note reveal">
           <strong>Основа проекта</strong>
@@ -613,10 +672,10 @@
           <h2>Есть идеи, замечания или предложения</h2>
           <p>Нужна помощь с запуском или настройкой, есть замечания по продукту или идеи, как сделать лучше — напишите напрямую в Telegram.</p>
           <div class="help-actions">
-            <a class="button primary" href="https://t.me/n1kkid" target="_blank" rel="noreferrer">Написать в Telegram <span aria-hidden="true">↗</span></a>
+            <a class="button primary" href="https://t.me/n1kkid" target="_blank" rel="noopener noreferrer">Написать в Telegram <span aria-hidden="true">↗</span></a>
           </div>
         </div>
-        <a class="help-contact reveal" href="https://t.me/n1kkid" target="_blank" rel="noreferrer">
+        <a class="help-contact reveal" href="https://t.me/n1kkid" target="_blank" rel="noopener noreferrer">
           <span class="label">Telegram</span>
           <span class="handle">
             <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z" fill="currentColor"/></svg>
@@ -631,7 +690,7 @@
   <footer>
     <div class="container footer-row">
       <div>WLTraders · Open source P2P processing platform</div>
-      <div class="footer-links"><a href="#top">Наверх ↑</a><a href="#help">Нужна помощь</a><a href="https://github.com/niiikkid/p2p.processing.traders" target="_blank" rel="noreferrer">GitHub ↗</a></div>
+      <div class="footer-links"><a href="#top">Наверх ↑</a><a href="https://demo.wltraders.pro/" target="_blank" rel="noopener noreferrer">Демо ↗</a><a href="#help">Нужна помощь</a><a href="https://github.com/niiikkid/p2p.processing.traders" target="_blank" rel="noopener noreferrer">GitHub ↗</a></div>
     </div>
   </footer>
 
@@ -790,23 +849,49 @@
     }
 
     const stage = document.querySelector('.screen-stage');
-    if (stage) {
+    const screenToggle = document.querySelector('.screen-toggle');
+    if (stage && screenToggle) {
       const slides = stage.querySelectorAll('img');
       let current = 0;
       let timer = null;
+      let playing = false;
+      const updateStageLabel = () => {
+        stage.setAttribute('aria-label', `Показать следующий скриншот. Сейчас: ${slides[current].alt}, ${current + 1} из ${slides.length}`);
+      };
       const next = () => {
         slides[current].classList.remove('active');
+        slides[current].setAttribute('aria-hidden', 'true');
         current = (current + 1) % slides.length;
         slides[current].classList.add('active');
+        slides[current].setAttribute('aria-hidden', 'false');
+        updateStageLabel();
+      };
+      const start = () => {
+        if (reducedMotion) return;
+        clearInterval(timer);
+        timer = setInterval(next, 4000);
+        playing = true;
+        screenToggle.textContent = 'Пауза';
+        screenToggle.setAttribute('aria-label', 'Приостановить смену скриншотов');
+      };
+      const stop = () => {
+        clearInterval(timer);
+        timer = null;
+        playing = false;
+        screenToggle.textContent = 'Продолжить';
+        screenToggle.setAttribute('aria-label', 'Продолжить смену скриншотов');
       };
       stage.addEventListener('click', () => {
         next();
-        if (!reducedMotion) {
-          clearInterval(timer);
-          timer = setInterval(next, 4000);
-        }
+        if (playing) start();
       });
-      if (!reducedMotion) timer = setInterval(next, 4000);
+      screenToggle.addEventListener('click', () => playing ? stop() : start());
+      updateStageLabel();
+      if (reducedMotion) {
+        screenToggle.hidden = true;
+      } else {
+        start();
+      }
     }
   </script>
 </body>
