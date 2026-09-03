@@ -141,9 +141,6 @@
     .demo-credential { display: inline-flex; align-items: baseline; gap: 7px; }
     .demo-credential small { color: var(--muted); font-size: 11px; }
     .demo-credential code { color: var(--ink); font: 12px/1 var(--display); }
-    .hero-note { display: flex; gap: 22px; margin-top: 42px; color: var(--muted); font-size: 13px; }
-    .hero-note span { display: flex; align-items: center; gap: 8px; }
-    .hero-note span::before { content: "✓"; color: var(--accent); font-weight: 800; }
 
     .product-shot { position: relative; min-width: 700px; }
     .shot-frame { overflow: hidden; border: 1px solid var(--line); border-radius: 20px; background: #252a35; box-shadow: 0 38px 90px rgba(0,0,0,.42); transform: perspective(1500px) rotateY(-4deg) rotateX(1.5deg); transform-origin: left center; }
@@ -266,12 +263,11 @@
       .nav-links a { min-height: 46px; display: flex; align-items: center; padding: 0 12px; }
 
       .nav { gap: 10px; }
-      .nav .demo-link { min-height: 42px; padding: 0 13px; font-size: 11px; }
+      .nav .help-link { min-height: 42px; padding: 0 13px; font-size: 11px; }
       .menu-button { display: grid; place-items: center; flex: none; }
       .hero { padding: 66px 0 60px; }
       h1 { font-size: clamp(43px, 12.5vw, 56px); }
       .hero-copy > p { font-size: 18px; }
-      .hero-note { flex-direction: column; gap: 8px; }
       .product-shot { min-width: 0; width: 100%; height: 350px; }
       .product-shot .shot-frame { width: 650px; }
       .principles-grid { grid-template-columns: 1fr; }
@@ -352,11 +348,6 @@
     h1 { max-width: none; font-weight: 300; letter-spacing: -.075em; font-size: clamp(52px, 6.1vw, 92px); line-height: .98; }
     h1 span { color: #9aa1ad; }
     .hero-copy > p { max-width: 680px; margin-top: 0; color: rgba(240,240,250,.66); }
-    .hero-points { list-style: none; margin: 18px 0 0; padding: 0; }
-    .hero-points li { display: flex; align-items: center; gap: 10px; padding: 3px 0; border-top: 1px solid var(--line); color: rgba(240, 240, 250, .72); font-size: 12.5px; }
-    .hero-points li:first-child { border-top: 0; }
-    .hero-points li::before { content: "·"; color: var(--ink); font-weight: 800; }
-    .hero-note span::before { color: var(--ink); }
 
     .principles { background: #020203; }
     .principle b { font-family: var(--display); font-weight: 400; letter-spacing: -.02em; }
@@ -407,7 +398,6 @@
       .hero-grid { grid-template-columns: minmax(0, 1fr) minmax(0, 1.27fr); gap: 64px; align-items: stretch; }
       .hero-copy { display: flex; flex-direction: column; }
       .hero-actions { margin-top: 26px; }
-      .hero-note { margin-top: auto; padding-top: 20px; }
     }
     .screen-viewer { position: relative; width: 100%; padding: 10px; border: 1px solid var(--line); border-radius: 2px; background: rgba(240, 240, 250, .025); display: flex; flex-direction: column; justify-content: center; }
     .screen-stage { position: relative; width: 100%; aspect-ratio: 1600 / 776; overflow: hidden; padding: 0; border: 0; border-radius: 2px; color: inherit; background: #08090c; cursor: pointer; text-align: initial; }
@@ -433,21 +423,6 @@
     .screen-toggle:hover { background: rgba(240,240,250,.14); border-color: rgba(240,240,250,.5); }
 
     /* Help / contact */
-    .nav-links a.nav-help {
-      margin-left: 4px;
-      padding: 8px 17px;
-      border: 1px solid var(--line);
-      border-radius: 999px;
-      color: var(--ink);
-      font-family: var(--display);
-      font-size: 12px;
-      font-weight: 400;
-      letter-spacing: .09em;
-      text-transform: uppercase;
-      transition: background .2s ease, border-color .2s ease, color .2s ease;
-    }
-    .nav-links a.nav-help:hover { color: #000; background: var(--ink); border-color: var(--ink); }
-
     .help { padding: 140px 0 130px; background: #020203; border-top: 1px solid var(--line); }
     .help-card { display: grid; grid-template-columns: 1.15fr .85fr; gap: 80px; align-items: center; }
     .help-copy h2 { margin-top: 22px; font-size: clamp(40px, 5vw, 66px); line-height: 1.02; letter-spacing: -.045em; font-weight: 300; }
@@ -472,8 +447,6 @@
       .help-contact { max-width: 540px; }
     }
     @media (max-width: 900px) {
-      .nav-links a.nav-help { margin: 0; padding: 0 12px; border: 0; border-radius: 0; font-family: var(--body); font-size: 16px; letter-spacing: 0; text-transform: none; }
-      .nav-links a.nav-help:hover { background: transparent; color: var(--ink); }
       .help { padding: 84px 0; }
       .help-contact .handle { font-size: 26px; }
     }
@@ -504,10 +477,9 @@
         <a href="#capabilities">Возможности</a>
         <a href="#flow">Как работает</a>
         <a href="#opensource">Исходный код</a>
-        <a href="#help" class="nav-help">Нужна помощь</a>
       </nav>
-      <a class="github-link demo-link" href="https://demo.wltraders.pro/" target="_blank" rel="noopener noreferrer">
-        Открыть демо <span aria-hidden="true">↗</span>
+      <a class="github-link help-link" href="#help">
+        Нужна помощь <span aria-hidden="true">?</span>
       </a>
       <button class="menu-button" type="button" aria-label="Открыть меню" aria-expanded="false" aria-controls="nav-links">☰</button>
     </div>
@@ -524,11 +496,6 @@
         <div class="hero-grid reveal">
           <div class="hero-copy">
             <p>WLTraders — готовая основа для команды, которая хочет принимать P2P-платежи, проводить выплаты и управлять трейдерами в одной системе.</p>
-            <ul class="hero-points">
-              <li>Приём P2P-платежей и выплаты</li>
-              <li>Кабинеты мерчанта, трейдера и поддержки</li>
-              <li>Споры, реквизиты и H2H API</li>
-            </ul>
             <div class="hero-actions">
               <a class="button primary" href="https://demo.wltraders.pro/" target="_blank" rel="noopener noreferrer">Посмотреть демо <span aria-hidden="true">↗</span></a>
               <a class="button" href="https://github.com/niiikkid/p2p.processing.traders" target="_blank" rel="noopener noreferrer">Исходный код <span aria-hidden="true">↗</span></a>
@@ -537,10 +504,6 @@
               <span>Демо-доступ</span>
               <span class="demo-credential"><small>Логин</small><code>admin</code></span>
               <span class="demo-credential"><small>Пароль</small><code>password</code></span>
-            </div>
-            <div class="hero-note" aria-label="Ключевые свойства">
-              <span>На своём сервере</span>
-              <span>Под контролем владельца</span>
             </div>
           </div>
 
