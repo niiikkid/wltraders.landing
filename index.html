@@ -1,0 +1,844 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>WLPay — open source P2P-процессинг для своей площадки</title>
+  <meta name="description" content="WLPay — self-hosted P2P-процессинг с открытым исходным кодом для команд, которые хотят запустить собственную площадку для приёма платежей и выплат.">
+  <meta name="keywords" content="P2P процессинг, P2P платформа, платформа для трейдеров, платформа для мерчантов, P2P acquiring, P2P payment processing, self-hosted payment platform, merchant API, выплаты, USDT processing">
+  <meta name="theme-color" content="#000000">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="WLPay — своя P2P-площадка на своих правилах">
+  <meta property="og:description" content="Open source основа для запуска P2P-процессинга: мерчанты, трейдеры, сделки, выплаты, споры и расчёты в одной системе.">
+
+  <meta name="twitter:card" content="summary">
+  <script>
+    (() => {
+      const queryMode = new URLSearchParams(location.search).get('mode');
+      const savedMode = localStorage.getItem('wlpay-site-mode');
+      document.documentElement.dataset.mode = queryMode === 'cascade' || (!queryMode && savedMode === 'cascade')
+        ? 'cascade'
+        : 'platform';
+    })();
+  </script>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 64 64%22><rect width=%2264%22 height=%2264%22 rx=%2212%22 fill=%22%23000000%22/><path d=%22M13 18h8l6 25 5-18h7l5 18 5-25h8L49 49H40l-5-16-5 16h-9z%22 fill=%22%23f0f0fa%22/></svg>">
+  <style>
+    :root {
+      --bg: #000000;
+      --bg-soft: #06070a;
+      --surface: #0b0d12;
+      --surface-2: #11141a;
+      --ink: #f0f0fa;
+      --muted: rgba(240, 240, 250, .62);
+      --line: rgba(240, 240, 250, .14);
+      --accent: #f0f0fa;
+      --accent-strong: #ffffff;
+      --accent-ink: #050507;
+      --max: 1180px;
+      --radius: 2px;
+      --display: "SFMono-Regular", Consolas, "Liberation Mono", monospace;
+      --body: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      color: var(--ink);
+      background: var(--bg);
+      font-family: var(--body);
+      font-size: 17px;
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+    }
+    a { color: inherit; text-decoration: none; }
+    button { font: inherit; }
+    img { display: block; max-width: 100%; }
+    ::selection { color: var(--accent-ink); background: var(--accent); }
+
+    .container { width: min(calc(100% - 40px), var(--max)); margin-inline: auto; }
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 9px;
+      color: var(--accent-strong);
+      font-size: 12px;
+      font-weight: 750;
+      letter-spacing: .13em;
+      text-transform: uppercase;
+    }
+    .eyebrow::before { content: ""; width: 7px; height: 7px; border-radius: 50%; background: var(--accent); box-shadow: 0 0 0 5px rgba(154, 221, 115, .12); }
+
+    .site-header {
+      position: sticky;
+      inset-block-start: 0;
+      z-index: 20;
+      border-bottom: 1px solid transparent;
+      background: rgba(17, 20, 15, .82);
+      backdrop-filter: blur(16px);
+      transition: border-color .2s ease;
+    }
+    .site-header.scrolled { border-color: var(--line); }
+    .nav { min-height: 74px; display: flex; align-items: center; justify-content: space-between; gap: 24px; }
+    .brand { display: flex; align-items: center; gap: 12px; font-weight: 750; letter-spacing: -.02em; }
+    .brand-mark { width: 34px; height: 34px; display: grid; place-items: center; border-radius: 10px; color: var(--accent-ink); background: var(--accent); font-size: 15px; font-weight: 850; }
+    .brand small { display: block; color: var(--muted); font-size: 10px; font-weight: 650; letter-spacing: .08em; text-transform: uppercase; }
+    .nav-links { display: flex; align-items: center; gap: 28px; color: #c9d0c4; font-size: 14px; }
+    .nav-links a:hover { color: var(--ink); }
+    .github-link, .button {
+      min-height: 46px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 9px;
+      padding: 0 20px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      font-size: 14px;
+      font-weight: 750;
+      transition: transform .2s ease, background .2s ease, border-color .2s ease;
+    }
+    .github-link:hover, .button:hover { transform: translateY(-2px); border-color: rgba(227, 239, 219, .28); background: var(--surface-2); }
+    .button.primary { color: var(--accent-ink); background: var(--accent); border-color: var(--accent); }
+    .button.primary:hover { background: var(--accent-strong); border-color: var(--accent-strong); }
+    .menu-button { display: none; width: 46px; height: 46px; padding: 0; border: 1px solid var(--line); border-radius: 50%; color: var(--ink); background: transparent; }
+
+    .mode-switch {
+      min-height: 38px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 0 14px;
+      border: 1px solid rgba(85, 215, 255, .62);
+      color: #061217 !important;
+      background: #55d7ff;
+      box-shadow: 0 0 0 1px rgba(85, 215, 255, .13), 0 0 25px rgba(85, 215, 255, .2);
+      font-family: var(--display);
+      font-size: 11px;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      transition: transform .2s ease, background .2s ease, box-shadow .2s ease;
+    }
+    .mode-switch:hover { transform: translateY(-2px); background: #a9edff; box-shadow: 0 0 34px rgba(85, 215, 255, .34); }
+    .mode-switch .question { width: 20px; height: 20px; display: grid; place-items: center; border: 1px solid rgba(6,18,23,.3); border-radius: 50%; font-weight: 800; }
+
+    html[data-mode="platform"] .cascade-mode,
+    html[data-mode="cascade"] .open-mode { display: none !important; }
+
+    .hero { position: relative; overflow: hidden; padding: 104px 0 82px; }
+    .hero::after {
+      content: "";
+      position: absolute;
+      width: 520px;
+      height: 520px;
+      right: -330px;
+      top: 130px;
+      border: 1px solid rgba(154, 221, 115, .18);
+      border-radius: 50%;
+      box-shadow: 0 0 0 90px rgba(154, 221, 115, .025), 0 0 0 180px rgba(154, 221, 115, .018);
+      pointer-events: none;
+    }
+    .hero-grid { display: grid; grid-template-columns: .88fr 1.12fr; align-items: center; gap: 68px; }
+    h1, h2, h3 { margin: 0; font-family: var(--display); text-wrap: balance; }
+    h1 { max-width: 700px; margin-top: 22px; font-size: clamp(52px, 6.1vw, 92px); line-height: .98; letter-spacing: -.062em; font-weight: 650; }
+    h1 span { color: var(--accent); }
+    .hero-copy > p { max-width: 620px; margin: 30px 0 0; color: #bdc6b7; font-size: clamp(18px, 2vw, 21px); line-height: 1.55; text-wrap: pretty; }
+    .hero-actions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 36px; }
+    .hero-note { display: flex; gap: 22px; margin-top: 42px; color: var(--muted); font-size: 13px; }
+    .hero-note span { display: flex; align-items: center; gap: 8px; }
+    .hero-note span::before { content: "✓"; color: var(--accent); font-weight: 800; }
+
+    .product-shot { position: relative; min-width: 700px; }
+    .shot-frame { overflow: hidden; border: 1px solid var(--line); border-radius: 20px; background: #252a35; box-shadow: 0 38px 90px rgba(0,0,0,.42); transform: perspective(1500px) rotateY(-4deg) rotateX(1.5deg); transform-origin: left center; }
+    .shot-bar { height: 42px; display: flex; align-items: center; gap: 7px; padding: 0 16px; border-bottom: 1px solid rgba(255,255,255,.06); background: #20242d; }
+    .shot-bar i { width: 8px; height: 8px; border-radius: 50%; background: #4c5260; }
+    .shot-frame img { width: 100%; aspect-ratio: 2 / 1; object-fit: cover; object-position: center; }
+    .shot-tag { position: absolute; right: 24px; bottom: -24px; padding: 14px 18px; border: 1px solid rgba(154, 221, 115, .25); border-radius: 14px; color: #dce8d5; background: #1c2219; box-shadow: 0 16px 45px rgba(0,0,0,.25); font-size: 13px; font-weight: 700; }
+    .shot-tag b { color: var(--accent); }
+
+    .principles { border-block: 1px solid var(--line); }
+    .principles-grid { display: grid; grid-template-columns: repeat(3, 1fr); }
+    .principle { padding: 30px 36px; border-left: 1px solid var(--line); }
+    .principle:first-child { border-left: 0; padding-left: 0; }
+    .principle:last-child { padding-right: 0; }
+    .principle b { display: block; margin-bottom: 4px; color: var(--ink); font-size: 15px; }
+    .principle span { color: var(--muted); font-size: 14px; }
+
+    section { padding: 120px 0; }
+    .section-head { display: grid; grid-template-columns: .78fr 1.22fr; gap: 70px; margin-bottom: 68px; }
+    .section-head h2 { font-size: clamp(39px, 5vw, 68px); line-height: 1.04; letter-spacing: -.045em; font-weight: 630; }
+    .section-head p { max-width: 600px; margin: 10px 0 0; color: var(--muted); font-size: 19px; }
+
+    .audience { background: #f1f4ed; color: #151813; }
+    .audience .eyebrow { color: #41692c; }
+    .audience .section-head p { color: #586052; }
+    .audience-grid { display: grid; grid-template-columns: 1.22fr .78fr; gap: 18px; }
+    .audience-card { min-height: 315px; padding: 40px; display: flex; flex-direction: column; justify-content: space-between; border: 1px solid rgba(20, 29, 16, .11); border-radius: 24px; background: #e8ece3; }
+    .audience-card.dark { color: var(--ink); background: #171b15; border-color: #171b15; }
+    .audience-card .number { color: #6a7364; font-size: 13px; font-weight: 750; letter-spacing: .12em; }
+    .audience-card.dark .number { color: var(--accent); }
+    .audience-card h3 { max-width: 610px; font-size: clamp(29px, 3.7vw, 49px); line-height: 1.08; letter-spacing: -.035em; font-weight: 620; }
+    .audience-card p { max-width: 580px; margin: 18px 0 0; color: #576051; }
+    .audience-card.dark p { color: #adb6a7; }
+
+    .system-layout { display: grid; grid-template-columns: .9fr 1.1fr; gap: 80px; align-items: start; }
+    .system-intro { position: sticky; top: 112px; }
+    .system-intro h2 { margin-top: 18px; font-size: clamp(40px, 5vw, 66px); line-height: 1.02; letter-spacing: -.047em; font-weight: 630; }
+    .system-intro p { margin: 25px 0 0; color: var(--muted); font-size: 18px; }
+    .capability-list { border-top: 1px solid var(--line); }
+    .capability { display: grid; grid-template-columns: 58px 1fr; gap: 10px; padding: 27px 0; border-bottom: 1px solid var(--line); }
+    .capability .num { color: var(--accent); font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 12px; padding-top: 5px; }
+    .capability h3 { font-size: 22px; letter-spacing: -.02em; }
+    .capability p { margin: 7px 0 0; color: var(--muted); font-size: 15px; }
+
+    .flow { background: var(--bg-soft); }
+    .flow-board { padding: 54px; border: 1px solid var(--line); border-radius: 28px; background: #131710; }
+    .flow-row { display: grid; grid-template-columns: 1fr 56px 1fr 56px 1fr; align-items: center; }
+    .flow-node { min-height: 180px; padding: 26px; display: flex; flex-direction: column; justify-content: space-between; border: 1px solid var(--line); border-radius: 18px; background: var(--surface); }
+    .flow-node.center { color: var(--accent-ink); background: var(--accent); border-color: var(--accent); }
+    .flow-node small { color: var(--muted); font-size: 11px; font-weight: 750; letter-spacing: .12em; text-transform: uppercase; }
+    .flow-node.center small { color: #456035; }
+    .flow-node h3 { font-size: 24px; }
+    .flow-node p { margin: 7px 0 0; color: var(--muted); font-size: 14px; }
+    .flow-node.center p { color: #304625; }
+    .flow-arrow { position: relative; height: 1px; background: rgba(154, 221, 115, .4); }
+    .flow-arrow::after { content: ""; position: absolute; right: -1px; top: -4px; width: 8px; height: 8px; border-top: 1px solid var(--accent); border-right: 1px solid var(--accent); transform: rotate(45deg); }
+    .flow-caption { margin: 28px 0 0; color: var(--muted); font-size: 14px; text-align: center; }
+
+    .preview { overflow: hidden; }
+    .preview .section-head { align-items: end; }
+    .preview-wrap { position: relative; }
+    .preview-wrap::before { content: ""; position: absolute; inset: 8% 8% -20%; background: rgba(154, 221, 115, .1); filter: blur(100px); }
+    .preview-frame { position: relative; overflow: hidden; padding: 12px; border: 1px solid var(--line); border-radius: 25px; background: var(--surface); box-shadow: 0 35px 100px rgba(0,0,0,.35); }
+    .preview-frame img { width: 100%; border-radius: 16px; }
+
+    .open-source { background: var(--accent); color: var(--accent-ink); }
+    .open-grid { display: grid; grid-template-columns: 1.15fr .85fr; gap: 80px; align-items: end; }
+    .open-source .eyebrow { color: #345326; }
+    .open-source .eyebrow::before { background: #345326; box-shadow: 0 0 0 5px rgba(52,83,38,.12); }
+    .open-source h2 { margin-top: 22px; max-width: 800px; font-size: clamp(46px, 6vw, 82px); line-height: .98; letter-spacing: -.055em; font-weight: 650; }
+    .open-source p { max-width: 580px; margin: 26px 0 0; color: #304625; font-size: 18px; }
+    .open-source .button { border-color: rgba(20, 32, 15, .2); background: var(--accent-ink); color: var(--ink); }
+    .open-source .button:hover { background: #26331f; }
+    .code-note { padding: 28px; border: 1px solid rgba(20,32,15,.17); border-radius: 20px; background: rgba(255,255,255,.2); }
+    .code-note strong { display: block; margin-bottom: 12px; font-size: 14px; }
+    .code-note code { display: block; overflow-x: auto; padding: 16px; border-radius: 12px; color: #dce9d5; background: #172012; font: 13px/1.6 ui-monospace, SFMono-Regular, Menlo, monospace; white-space: nowrap; }
+
+    .faq { padding-bottom: 90px; }
+    .faq-grid { display: grid; grid-template-columns: .78fr 1.22fr; gap: 70px; }
+    .faq h2 { margin-top: 18px; font-size: clamp(40px, 5vw, 64px); line-height: 1; letter-spacing: -.045em; }
+    .faq-list { border-top: 1px solid var(--line); }
+    details { border-bottom: 1px solid var(--line); }
+    summary { min-height: 78px; display: flex; align-items: center; justify-content: space-between; gap: 30px; cursor: pointer; list-style: none; font-size: 18px; font-weight: 700; }
+    summary::-webkit-details-marker { display: none; }
+    summary::after { content: "+"; color: var(--accent); font-size: 26px; font-weight: 400; }
+    details[open] summary::after { content: "−"; }
+    details p { margin: -2px 50px 26px 0; color: var(--muted); font-size: 15px; }
+
+    footer { padding: 38px 0; border-top: 1px solid var(--line); color: var(--muted); font-size: 13px; }
+    .footer-row { display: flex; align-items: center; justify-content: space-between; gap: 24px; }
+    .footer-links { display: flex; gap: 22px; }
+    .footer-links a:hover { color: var(--ink); }
+
+    .reveal { opacity: 0; transform: translateY(18px); transition: opacity .65s ease, transform .65s ease; }
+    .reveal.visible { opacity: 1; transform: none; }
+    :focus-visible { outline: 3px solid var(--accent); outline-offset: 3px; }
+
+    @media (max-width: 980px) {
+      .hero { padding-top: 78px; }
+      .hero-grid { grid-template-columns: minmax(0, 1fr); gap: 58px; }
+      .hero-copy { max-width: 760px; min-width: 0; }
+      .product-shot { min-width: 0; width: 100%; height: 410px; }
+      .product-shot .shot-frame { width: 760px; max-width: none; transform: none; }
+      .section-head, .system-layout, .faq-grid, .open-grid { grid-template-columns: 1fr; gap: 36px; }
+      .system-intro { position: static; }
+      .audience-grid { grid-template-columns: 1fr; }
+      .flow-board { padding: 35px; }
+      .flow-row { grid-template-columns: 1fr; gap: 14px; }
+      .flow-arrow { width: 1px; height: 32px; margin-inline: auto; }
+      .flow-arrow::after { right: -4px; top: auto; bottom: 0; transform: rotate(135deg); }
+      .flow-node { min-height: 150px; }
+    }
+
+    @media (max-width: 760px) {
+      body { font-size: 16px; }
+      .container { width: min(calc(100% - 28px), var(--max)); }
+      .nav-links { position: absolute; left: 14px; right: 14px; top: 72px; display: none; padding: 16px; flex-direction: column; align-items: stretch; gap: 4px; border: 1px solid var(--line); border-radius: 18px; background: #171b15; box-shadow: 0 20px 50px rgba(0,0,0,.35); }
+      .nav-links.open { display: flex; }
+      .nav-links a { min-height: 46px; display: flex; align-items: center; padding: 0 12px; }
+      .nav-links .mode-switch { margin-top: 8px; padding-inline: 12px; }
+      .nav .github-link { display: none; }
+      .menu-button { display: grid; place-items: center; }
+      .hero { padding: 66px 0 60px; }
+      h1 { font-size: clamp(43px, 12.5vw, 56px); }
+      .hero-copy > p { font-size: 18px; }
+      .hero-note { flex-direction: column; gap: 8px; }
+      .product-shot { min-width: 0; width: 100%; height: 350px; }
+      .product-shot .shot-frame { width: 650px; }
+      .principles-grid { grid-template-columns: 1fr; }
+      .principle, .principle:first-child, .principle:last-child { padding: 19px 0; border-left: 0; border-top: 1px solid var(--line); }
+      .principle:first-child { border-top: 0; }
+      section { padding: 84px 0; }
+      .section-head { margin-bottom: 42px; }
+      .audience-card { min-height: 280px; padding: 28px; }
+      .flow-board { padding: 18px; }
+      .open-grid { gap: 45px; }
+      .code-note { padding: 18px; }
+      .footer-row { align-items: flex-start; flex-direction: column; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      *, *::before, *::after { animation-duration: .01ms !important; transition-duration: .01ms !important; }
+    }
+
+    /* Monochrome orbital direction */
+    .site-header { background: rgba(0, 0, 0, .78); }
+    .brand-mark { color: #000; background: var(--ink); border-radius: 2px; }
+    .nav-links { color: rgba(240, 240, 250, .72); }
+    .eyebrow { color: rgba(240, 240, 250, .68); font-family: var(--display); font-weight: 400; letter-spacing: .16em; }
+    .eyebrow::before { background: var(--ink); box-shadow: 0 0 0 4px rgba(240, 240, 250, .08); }
+    .button, .github-link { border-radius: 2px; font-family: var(--display); font-weight: 400; letter-spacing: .08em; text-transform: uppercase; }
+    .button.primary { color: #000; background: var(--ink); border-color: var(--ink); }
+    .button.primary:hover { color: #000; background: #fff; border-color: #fff; }
+
+    .hero {
+      min-height: calc(100svh - 74px);
+      display: flex;
+      align-items: center;
+      padding: 110px 0 100px;
+      background:
+        radial-gradient(circle at 82% 24%, rgba(102, 115, 146, .13) 0, rgba(25, 29, 39, .06) 19%, transparent 42%),
+        radial-gradient(circle at 10% 90%, rgba(255,255,255,.035), transparent 32%),
+        #000;
+    }
+    .hero::before {
+      content: "";
+      position: absolute;
+      width: min(68vw, 920px);
+      aspect-ratio: 1;
+      right: -21vw;
+      top: 50%;
+      border: 1px solid rgba(240,240,250,.15);
+      border-radius: 50%;
+      transform: translateY(-50%);
+      box-shadow: 0 0 0 110px rgba(240,240,250,.015), 0 0 0 220px rgba(240,240,250,.01);
+      pointer-events: none;
+    }
+    .hero::after {
+      width: 4px;
+      height: 4px;
+      right: 22%;
+      top: 23%;
+      border: 0;
+      border-radius: 50%;
+      background: #fff;
+      box-shadow: -180px 110px 0 rgba(255,255,255,.46), 130px 180px 0 rgba(255,255,255,.3), -80px 340px 0 rgba(255,255,255,.24), 220px 390px 0 rgba(255,255,255,.32);
+    }
+    .hero-grid { grid-template-columns: minmax(0, 1fr); }
+    .hero-copy { position: relative; z-index: 2; max-width: 980px; }
+    h1 { max-width: 1000px; font-weight: 300; letter-spacing: -.075em; }
+    h1 span { color: #9aa1ad; }
+    .hero-copy > p { max-width: 680px; color: rgba(240,240,250,.66); }
+    .hero-note span::before { color: var(--ink); }
+
+    .principles { background: #020203; }
+    .principle b { font-family: var(--display); font-weight: 400; letter-spacing: -.02em; }
+
+    .audience { color: var(--ink); background: #050609; }
+    .audience .eyebrow { color: rgba(240,240,250,.62); }
+    .audience .section-head p { color: var(--muted); }
+    .audience-card, .audience-card.dark {
+      color: var(--ink);
+      border: 1px solid var(--line);
+      border-radius: 2px;
+      background: rgba(240,240,250,.025);
+    }
+    .audience-card .number, .audience-card.dark .number { color: rgba(240,240,250,.48); font-family: var(--display); }
+    .audience-card p, .audience-card.dark p { color: var(--muted); }
+
+    .flow-board { border-radius: 2px; background: #020203; }
+    .flow-node { border-radius: 2px; background: rgba(240,240,250,.025); }
+    .flow-node.center { color: #000; background: var(--ink); border-color: var(--ink); }
+    .flow-node.center small, .flow-node.center p { color: rgba(0,0,0,.62); }
+    .flow-arrow { background: rgba(240,240,250,.38); }
+
+    .open-source { color: var(--ink); background: #000; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
+    .open-source .eyebrow { color: rgba(240,240,250,.62); }
+    .open-source .eyebrow::before { background: var(--ink); box-shadow: 0 0 0 4px rgba(240,240,250,.08); }
+    .open-source p { color: var(--muted); }
+    .open-source .button { color: #000; background: var(--ink); border-color: var(--ink); }
+    .open-source .button:hover { color: #000; background: #fff; }
+    .code-note { border: 1px solid var(--line); border-radius: 2px; background: rgba(240,240,250,.025); }
+    .code-note code { color: var(--ink); background: #08090c; border: 1px solid var(--line); border-radius: 0; }
+
+    .reveal { opacity: 1; transform: none; }
+
+    /* Commercial cascade mode */
+    .cascade-hero {
+      min-height: calc(100svh - 74px);
+      display: flex;
+      align-items: center;
+      position: relative;
+      overflow: hidden;
+      padding: 110px 0 92px;
+      background:
+        linear-gradient(100deg, #000 0%, rgba(0,0,0,.96) 45%, rgba(0,0,0,.66) 100%),
+        radial-gradient(circle at 78% 37%, rgba(85,215,255,.18), transparent 31%),
+        #000;
+    }
+    .cascade-hero::before {
+      content: "";
+      position: absolute;
+      width: min(60vw, 820px);
+      aspect-ratio: 1;
+      right: -14vw;
+      top: 50%;
+      border: 1px solid rgba(85,215,255,.32);
+      border-radius: 50%;
+      transform: translateY(-50%);
+      box-shadow: 0 0 0 90px rgba(85,215,255,.026), 0 0 0 180px rgba(85,215,255,.016);
+      pointer-events: none;
+    }
+    .cascade-hero::after {
+      content: "";
+      position: absolute;
+      width: 8px;
+      height: 8px;
+      right: 25%;
+      top: 25%;
+      border-radius: 50%;
+      background: #55d7ff;
+      box-shadow: -190px 150px 0 rgba(85,215,255,.5), 140px 210px 0 rgba(255,255,255,.38), -60px 390px 0 rgba(255,255,255,.25);
+    }
+    .cascade-copy { position: relative; z-index: 2; max-width: 920px; }
+    .cascade-copy h1 { max-width: 900px; }
+    .cascade-copy h1 span { color: #55d7ff; }
+    .cascade-copy > p { max-width: 720px; color: rgba(240,240,250,.68); font-size: clamp(18px, 2vw, 22px); }
+    .cascade-copy .eyebrow, .cascade-page .eyebrow { color: #8ce5ff; }
+    .cascade-copy .eyebrow::before, .cascade-page .eyebrow::before { background: #55d7ff; box-shadow: 0 0 0 4px rgba(85,215,255,.12); }
+    .button.cascade-primary { color: #061217; background: #55d7ff; border-color: #55d7ff; }
+    .button.cascade-primary:hover { color: #000; background: #a9edff; border-color: #a9edff; }
+    .cascade-note span::before { color: #55d7ff; }
+
+    .cascade-strip { border-block: 1px solid rgba(85,215,255,.18); background: #020407; }
+    .cascade-strip .principle b { color: #dff8ff; }
+
+    .offer { background: #040609; }
+    .offer-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; border: 1px solid var(--line); background: var(--line); }
+    .offer-card { min-height: 320px; padding: 36px; display: flex; flex-direction: column; justify-content: space-between; background: #070a0e; }
+    .offer-card.featured { background: linear-gradient(145deg, rgba(85,215,255,.11), #070a0e 65%); }
+    .offer-card .num { color: #55d7ff; font: 12px/1 var(--display); letter-spacing: .14em; }
+    .offer-card h3 { margin-top: 60px; font-size: clamp(25px, 2.5vw, 35px); line-height: 1.08; font-weight: 400; }
+    .offer-card p { margin: 18px 0 0; color: var(--muted); font-size: 15px; }
+
+    .delivery { background: #000; }
+    .delivery-grid { display: grid; grid-template-columns: .78fr 1.22fr; gap: 80px; }
+    .delivery-intro { position: sticky; top: 112px; align-self: start; }
+    .delivery-intro h2 { margin-top: 18px; font-size: clamp(40px, 5vw, 67px); line-height: 1.02; font-weight: 300; letter-spacing: -.055em; }
+    .delivery-intro p { color: var(--muted); }
+    .delivery-list { border-top: 1px solid var(--line); counter-reset: delivery; }
+    .delivery-step { counter-increment: delivery; display: grid; grid-template-columns: 64px 1fr; gap: 12px; padding: 30px 0; border-bottom: 1px solid var(--line); }
+    .delivery-step::before { content: "0" counter(delivery); color: #55d7ff; font: 12px/1.5 var(--display); }
+    .delivery-step h3 { font-size: 23px; font-weight: 400; }
+    .delivery-step p { margin: 8px 0 0; color: var(--muted); font-size: 15px; }
+
+    .commercial-offer { border-block: 1px solid rgba(85,215,255,.22); background: linear-gradient(120deg, #031017, #000 62%); }
+    .commercial-grid { display: grid; grid-template-columns: 1.2fr .8fr; gap: 70px; align-items: center; }
+    .commercial-offer h2 { margin-top: 20px; max-width: 760px; font-size: clamp(43px, 5.6vw, 76px); line-height: 1; font-weight: 300; letter-spacing: -.06em; }
+    .commercial-offer p { max-width: 660px; color: rgba(240,240,250,.67); }
+    .offer-note { padding: 30px; border: 1px solid rgba(85,215,255,.26); background: rgba(85,215,255,.055); }
+    .offer-note strong { display: block; color: #8ce5ff; font: 13px/1.4 var(--display); letter-spacing: .12em; text-transform: uppercase; }
+    .offer-note ul { margin: 20px 0 0; padding: 0; list-style: none; }
+    .offer-note li { padding: 11px 0; border-top: 1px solid var(--line); color: rgba(240,240,250,.75); font-size: 15px; }
+
+    .cascade-contact { padding: 110px 0; text-align: left; }
+    .contact-panel { position: relative; overflow: hidden; padding: clamp(34px, 6vw, 76px); border: 1px solid rgba(85,215,255,.28); background: #05080c; }
+    .contact-panel::after { content: "?"; position: absolute; right: 4%; top: 50%; color: rgba(85,215,255,.06); font: 300 clamp(180px, 24vw, 330px)/1 var(--display); transform: translateY(-50%); pointer-events: none; }
+    .contact-panel > * { position: relative; z-index: 1; }
+    .contact-panel h2 { margin-top: 18px; max-width: 780px; font-size: clamp(42px, 6vw, 78px); line-height: 1; font-weight: 300; letter-spacing: -.06em; }
+    .contact-panel p { max-width: 630px; color: var(--muted); }
+    .telegram-placeholder { cursor: not-allowed; opacity: .78; }
+
+    .cascade-page footer { background: #000; }
+
+    @media (max-width: 980px) {
+      .offer-grid { grid-template-columns: 1fr; }
+      .offer-card { min-height: 250px; }
+      .delivery-grid, .commercial-grid { grid-template-columns: 1fr; gap: 42px; }
+      .delivery-intro { position: static; }
+    }
+
+    @media (max-width: 760px) {
+      .nav-links { border-radius: 2px; background: #08090c; box-shadow: none; }
+      .hero { min-height: auto; padding: 80px 0 86px; }
+      .hero::before { width: 620px; right: -470px; }
+      .hero::after { right: 11%; }
+      h1 { font-size: clamp(42px, 12vw, 54px); letter-spacing: -.07em; }
+      .hero-actions .button { width: 100%; }
+      .audience-card { border-radius: 2px; }
+      .cascade-hero { min-height: auto; padding: 82px 0 78px; }
+      .cascade-hero::before { width: 580px; right: -430px; }
+      .cascade-hero::after { right: 9%; }
+      .offer-card { min-height: 230px; padding: 28px; }
+      .offer-card h3 { margin-top: 35px; }
+      .contact-panel .button { width: 100%; }
+    }
+  </style>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    "name": "WLPay",
+    "applicationCategory": "FinanceApplication",
+    "operatingSystem": "Self-hosted",
+    "description": "Open source P2P payment processing platform for merchants and traders.",
+    "url": "https://github.com/niiikkid/p2p.processing.traders",
+    "codeRepository": "https://github.com/niiikkid/p2p.processing.traders"
+  }
+  </script>
+</head>
+<body>
+  <header class="site-header" id="top">
+    <div class="container nav">
+      <a class="brand" href="#top" aria-label="WLPay — в начало">
+        <span class="brand-mark">WL</span>
+        <span>WLPay<small>P2P processing</small></span>
+      </a>
+      <nav class="nav-links" id="nav-links" aria-label="Основная навигация">
+        <a class="open-mode" href="#audience">Для кого</a>
+        <a class="open-mode" href="#capabilities">Возможности</a>
+        <a class="open-mode" href="#flow">Как работает</a>
+        <a class="open-mode" href="#opensource">Исходный код</a>
+        <a class="cascade-mode" href="#cascade-offer">Предложение</a>
+        <a class="cascade-mode" href="#cascade-process">Как подключаем</a>
+        <a class="cascade-mode" href="#cascade-contact">Связаться</a>
+        <a class="mode-switch open-mode" href="?mode=cascade" data-switch-mode="cascade"><span class="question" aria-hidden="true">?</span> Нужен каскад?</a>
+        <a class="mode-switch cascade-mode" href="./" data-switch-mode="platform">Нужна панель трейдеров</a>
+      </nav>
+      <a class="github-link open-mode" href="https://github.com/niiikkid/p2p.processing.traders" target="_blank" rel="noreferrer">
+        GitHub <span aria-hidden="true">↗</span>
+      </a>
+      <a class="github-link cascade-mode" href="#cascade-contact">Telegram <span aria-hidden="true">↘</span></a>
+      <button class="menu-button" type="button" aria-label="Открыть меню" aria-expanded="false" aria-controls="nav-links">☰</button>
+    </div>
+  </header>
+
+  <main class="open-mode">
+    <section class="hero">
+      <div class="container hero-grid">
+        <div class="hero-copy reveal">
+          <span class="eyebrow">Open source · Self-hosted</span>
+          <h1>Своя P2P-площадка. <span>На своих правилах.</span></h1>
+          <p>WLPay — готовая основа для команды, которая хочет принимать P2P-платежи, проводить выплаты и управлять трейдерами в одной системе.</p>
+          <div class="hero-actions">
+            <a class="button primary" href="https://github.com/niiikkid/p2p.processing.traders" target="_blank" rel="noreferrer">Посмотреть исходный код <span aria-hidden="true">↗</span></a>
+            <a class="button" href="#capabilities">Что уже есть внутри</a>
+          </div>
+          <div class="hero-note" aria-label="Ключевые свойства">
+            <span>На своём сервере</span>
+            <span>Под контролем владельца</span>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <div class="principles">
+      <div class="container principles-grid">
+        <div class="principle"><b>Свой сервер</b><span>Система разворачивается в вашей инфраструктуре.</span></div>
+        <div class="principle"><b>Свои данные</b><span>Операции и настройки остаются под вашим контролем.</span></div>
+        <div class="principle"><b>Своя модель работы</b><span>Лимиты, комиссии и процессы настраиваются под команду.</span></div>
+      </div>
+    </div>
+
+    <section class="audience" id="audience">
+      <div class="container">
+        <div class="section-head reveal">
+          <span class="eyebrow">Для кого</span>
+          <div>
+            <h2>Для тех, кто готов запускать</h2>
+            <p>Не конструктор для новичка и не услуга «под ключ». Это рабочая программная основа для людей, которые понимают P2P-рынок и собирают собственную площадку.</p>
+          </div>
+        </div>
+        <div class="audience-grid">
+          <article class="audience-card dark reveal">
+            <span class="number">01 · Трейдерские команды</span>
+            <div>
+              <h3>Когда команда выросла и ей нужна собственная система</h3>
+              <p>Управляйте трейдерами, реквизитами, лимитами, графиками, сделками и спорами без набора разрозненных таблиц и сервисов.</p>
+            </div>
+          </article>
+          <article class="audience-card reveal">
+            <span class="number">02 · Мерчанты и процессинг</span>
+            <div>
+              <h3>Когда нужен свой контур приёма и выплат</h3>
+              <p>Подключайте мерчантов по API, распределяйте заявки и контролируйте движение средств из одной панели.</p>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section id="capabilities">
+      <div class="container system-layout">
+        <div class="system-intro reveal">
+          <span class="eyebrow">Внутри платформы</span>
+          <h2>Не только кабинет. Весь рабочий контур.</h2>
+          <p>WLPay соединяет мерчантов, трейдеров и команду процессинга. Всё, что происходит со сделкой, видно и управляется в одном месте.</p>
+        </div>
+        <div class="capability-list reveal">
+          <article class="capability"><span class="num">01</span><div><h3>Приём платежей и выплаты</h3><p>Фиатные P2P-операции, статусы, комиссии и история движения средств.</p></div></article>
+          <article class="capability"><span class="num">02</span><div><h3>Кабинеты для разных ролей</h3><p>Администратор, мерчант, трейдер, тимлидер и поддержка работают со своими задачами.</p></div></article>
+          <article class="capability"><span class="num">03</span><div><h3>Реквизиты и распределение заявок</h3><p>Лимиты, расписания, статистика и выдача подходящих реквизитов трейдеров.</p></div></article>
+          <article class="capability"><span class="num">04</span><div><h3>Споры и ручная проверка</h3><p>Чеки, банковские выписки и понятный процесс разбора спорных операций.</p></div></article>
+          <article class="capability"><span class="num">05</span><div><h3>API для мерчантов</h3><p>H2H-подключение, callback-уведомления и журнал запросов для интеграции с внешними системами.</p></div></article>
+          <article class="capability"><span class="num">06</span><div><h3>Финансы и безопасность</h3><p>Внутренние балансы, учёт в USDT, антифрод, 2FA и журнал действий.</p></div></article>
+        </div>
+      </div>
+    </section>
+
+    <section class="flow" id="flow">
+      <div class="container">
+        <div class="section-head reveal">
+          <span class="eyebrow">Как это устроено</span>
+          <div><h2>Один маршрут для каждой сделки</h2><p>Мерчант создаёт заявку, платформа подбирает подходящие реквизиты, трейдер обрабатывает операцию, а команда видит весь путь и может вмешаться.</p></div>
+        </div>
+        <div class="flow-board reveal">
+          <div class="flow-row">
+            <article class="flow-node"><small>Вход</small><div><h3>Мерчант</h3><p>Передаёт заявку через API и получает статусы.</p></div></article>
+            <span class="flow-arrow" aria-hidden="true"></span>
+            <article class="flow-node center"><small>Управление</small><div><h3>WLPay</h3><p>Проверяет правила и распределяет операцию.</p></div></article>
+            <span class="flow-arrow" aria-hidden="true"></span>
+            <article class="flow-node"><small>Исполнение</small><div><h3>Трейдер</h3><p>Работает с реквизитами, сделкой и подтверждением.</p></div></article>
+          </div>
+          <p class="flow-caption">Споры, логи, комиссии и расчёты остаются внутри общего контура.</p>
+        </div>
+      </div>
+    </section>
+
+
+    <section class="open-source" id="opensource">
+      <div class="container open-grid">
+        <div class="reveal">
+          <span class="eyebrow">Open source</span>
+          <h2>Берите основу. Собирайте свою площадку.</h2>
+          <p>Изучайте устройство системы, разворачивайте её в своей инфраструктуре и адаптируйте процессы под собственную команду и рынок.</p>
+          <div class="hero-actions"><a class="button" href="https://github.com/niiikkid/p2p.processing.traders" target="_blank" rel="noreferrer">Открыть репозиторий на GitHub <span aria-hidden="true">↗</span></a></div>
+        </div>
+        <aside class="code-note reveal">
+          <strong>Основа проекта</strong>
+          <code>Laravel 11  ·  Vue 3  ·  MySQL 8  ·  Redis</code>
+          <p>Backend, интерфейс, очереди и хранение данных уже собраны в одном проекте.</p>
+        </aside>
+      </div>
+    </section>
+
+    <section class="faq">
+      <div class="container faq-grid">
+        <div class="reveal"><span class="eyebrow">Коротко о главном</span><h2>Перед стартом</h2></div>
+        <div class="faq-list reveal">
+          <details><summary>Это готовый сервис или исходный код?</summary><p>Это исходный код self-hosted платформы. Его нужно развернуть на своём сервере, настроить инфраструктуру и подключить нужные вашей команде интеграции.</p></details>
+          <details><summary>Кому подходит WLPay?</summary><p>Трейдерским командам, мерчантам и операторам процессинга, которые знакомы с P2P-рынком и хотят запустить собственную площадку.</p></details>
+          <details><summary>Можно ли подключать мерчантов по API?</summary><p>Да. В платформе есть H2H API, callback-уведомления и журнал запросов для связи с внешними системами.</p></details>
+          <details><summary>Где хранятся данные?</summary><p>Платформа разворачивается в инфраструктуре владельца. Конкретная схема хранения и защиты зависит от вашей серверной конфигурации.</p></details>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <main class="cascade-mode cascade-page" hidden>
+    <section class="cascade-hero">
+      <div class="container">
+        <div class="cascade-copy reveal">
+          <span class="eyebrow">Платёжная оркестрация · Под ключ</span>
+          <h1>Нужен платёжный каскад? <span>Соберём рабочий контур.</span></h1>
+          <p>Подключим мерчантов и платёжных провайдеров, настроим правила маршрутизации и дадим команде одну панель для контроля всех сделок.</p>
+          <div class="hero-actions">
+            <a class="button cascade-primary" href="#cascade-contact">Обсудить задачу в Telegram</a>
+            <a class="button" href="#cascade-offer">Что входит в работу</a>
+          </div>
+          <div class="hero-note cascade-note" aria-label="Ключевые свойства">
+            <span>Под вашу схему работы</span>
+            <span>Без привязки к одному провайдеру</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <div class="principles cascade-strip">
+      <div class="container principles-grid">
+        <div class="principle"><b>Один вход для мерчанта</b><span>Мерчант подключается один раз, а провайдеров может быть несколько.</span></div>
+        <div class="principle"><b>Автоматический маршрут</b><span>Сделка идёт туда, где она с большей вероятностью будет обработана.</span></div>
+        <div class="principle"><b>Весь путь под контролем</b><span>Статусы, ошибки, балансы и результаты видны в одной панели.</span></div>
+      </div>
+    </div>
+
+    <section class="offer" id="cascade-offer">
+      <div class="container">
+        <div class="section-head reveal">
+          <span class="eyebrow">Что предлагаем</span>
+          <div><h2>Не ещё одна интеграция. Слой управления над всеми.</h2><p>Каскад становится единой точкой между мерчантом и провайдерами: принимает заявку, выбирает маршрут, переключает при сбое и собирает результат.</p></div>
+        </div>
+        <div class="offer-grid reveal">
+          <article class="offer-card featured"><span class="num">01 · ИНТЕГРАЦИИ</span><div><h3>Подключение ваших провайдеров</h3><p>Разбираем API, приводим ответы к единому формату и прячем различия между провайдерами от мерчанта.</p></div></article>
+          <article class="offer-card"><span class="num">02 · ЛОГИКА</span><div><h3>Правила выбора и переключения</h3><p>Настраиваем приоритеты, лимиты, валюты, суммы, доступность и запасной маршрут для каждой сделки.</p></div></article>
+          <article class="offer-card"><span class="num">03 · КОНТРОЛЬ</span><div><h3>Панель для операционной команды</h3><p>Показываем сделки, конверсию, причины отказов, балансы и состояние подключений в одном месте.</p></div></article>
+        </div>
+      </div>
+    </section>
+
+    <section class="delivery" id="cascade-process">
+      <div class="container delivery-grid">
+        <div class="delivery-intro reveal">
+          <span class="eyebrow">Как начинаем</span>
+          <h2>От вашей схемы до первого рабочего потока.</h2>
+          <p>Точный объём и цена появляются после короткого разбора. Сначала выясняем, кого и как нужно соединить.</p>
+        </div>
+        <div class="delivery-list reveal">
+          <article class="delivery-step"><div><h3>Разбираем текущий поток</h3><p>Какие мерчанты, провайдеры, валюты, статусы и ограничения уже есть.</p></div></article>
+          <article class="delivery-step"><div><h3>Фиксируем первый этап</h3><p>Выбираем минимальный набор интеграций и правил, который уже даст рабочий результат.</p></div></article>
+          <article class="delivery-step"><div><h3>Подключаем и проверяем</h3><p>Собираем интеграции, тестируем успешные и ошибочные сценарии, настраиваем наблюдение.</p></div></article>
+          <article class="delivery-step"><div><h3>Запускаем и развиваем</h3><p>Передаём рабочий контур и добавляем новые маршруты по мере роста нагрузки.</p></div></article>
+        </div>
+      </div>
+    </section>
+
+    <section class="commercial-offer">
+      <div class="container commercial-grid">
+        <div class="reveal">
+          <span class="eyebrow">Черновик предложения</span>
+          <h2>Первый этап — понятный и измеримый.</h2>
+          <p>Вместо большой разработки «на будущее» начинаем с одного рабочего маршрута. После запуска видно, что улучшать и какие подключения добавлять следующими.</p>
+        </div>
+        <aside class="offer-note reveal">
+          <strong>Базовый состав</strong>
+          <ul>
+            <li>разбор требований и схема потока;</li>
+            <li>единый API для мерчанта;</li>
+            <li>подключение согласованных провайдеров;</li>
+            <li>правила каскада и резервный маршрут;</li>
+            <li>панель контроля и журнал ошибок;</li>
+            <li>запуск и передача документации.</li>
+          </ul>
+        </aside>
+      </div>
+    </section>
+
+    <section class="cascade-contact" id="cascade-contact">
+      <div class="container">
+        <div class="contact-panel reveal">
+          <span class="eyebrow">Следующий шаг</span>
+          <h2>Опишите задачу одним сообщением.</h2>
+          <p>Напишите, сколько у вас мерчантов и провайдеров, какие валюты используются и что сейчас мешает обработке платежей. Этого достаточно, чтобы начать разговор.</p>
+          <div class="hero-actions">
+            <a class="button cascade-primary telegram-placeholder" href="#" aria-disabled="true" title="Telegram-ссылка будет добавлена позже">Написать в Telegram · скоро</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <footer>
+      <div class="container footer-row">
+        <div>WLPay · Платёжный каскад и интеграции</div>
+        <div class="footer-links"><a href="#top">Наверх ↑</a><a href="./" data-switch-mode="platform">Панель трейдеров</a></div>
+      </div>
+    </footer>
+  </main>
+
+  <footer class="open-mode">
+    <div class="container footer-row">
+      <div>WLPay · Open source P2P processing platform</div>
+      <div class="footer-links"><a href="#top">Наверх ↑</a><a href="https://github.com/niiikkid/p2p.processing.traders" target="_blank" rel="noreferrer">GitHub ↗</a></div>
+    </div>
+  </footer>
+
+  <script>
+    const header = document.querySelector('.site-header');
+    const menuButton = document.querySelector('.menu-button');
+    const navLinks = document.querySelector('.nav-links');
+    const description = document.querySelector('meta[name="description"]');
+    const modeStorageKey = 'wlpay-site-mode';
+
+    const modeCopy = {
+      platform: {
+        title: 'WLPay — open source P2P-процессинг для своей площадки',
+        description: 'WLPay — self-hosted P2P-процессинг с открытым исходным кодом для команд, которые хотят запустить собственную площадку для приёма платежей и выплат.'
+      },
+      cascade: {
+        title: 'WLPay — платёжный каскад и интеграции под ключ',
+        description: 'Подключение платёжных провайдеров, единый API для мерчантов, правила каскада и панель контроля сделок.'
+      }
+    };
+
+    function applyMode(mode, updateHistory = false) {
+      const nextMode = mode === 'cascade' ? 'cascade' : 'platform';
+      document.documentElement.dataset.mode = nextMode;
+      document.querySelector('main.open-mode').hidden = nextMode !== 'platform';
+      document.querySelector('main.cascade-mode').hidden = nextMode !== 'cascade';
+      localStorage.setItem(modeStorageKey, nextMode);
+      document.title = modeCopy[nextMode].title;
+      description.setAttribute('content', modeCopy[nextMode].description);
+
+      if (updateHistory) {
+        const url = new URL(location.href);
+        if (nextMode === 'cascade') url.searchParams.set('mode', 'cascade');
+        else url.searchParams.delete('mode');
+        history.pushState({ mode: nextMode }, '', `${url.pathname}${url.search}${url.hash}`);
+      }
+
+      navLinks.classList.remove('open');
+      menuButton.setAttribute('aria-expanded', 'false');
+      menuButton.textContent = '☰';
+      scrollTo({ top: 0, behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth' });
+    }
+
+    document.querySelectorAll('[data-switch-mode]').forEach(link => {
+      link.addEventListener('click', event => {
+        event.preventDefault();
+        applyMode(link.dataset.switchMode, true);
+      });
+    });
+
+    document.querySelectorAll('.telegram-placeholder').forEach(link => {
+      link.addEventListener('click', event => event.preventDefault());
+    });
+
+    addEventListener('popstate', () => {
+      applyMode(new URLSearchParams(location.search).get('mode') === 'cascade' ? 'cascade' : 'platform');
+    });
+
+    applyMode(document.documentElement.dataset.mode);
+
+    addEventListener('scroll', () => header.classList.toggle('scrolled', scrollY > 8), { passive: true });
+    menuButton.addEventListener('click', () => {
+      const open = navLinks.classList.toggle('open');
+      menuButton.setAttribute('aria-expanded', String(open));
+      menuButton.textContent = open ? '×' : '☰';
+    });
+    navLinks.addEventListener('click', event => {
+      if (event.target.matches('a')) {
+        navLinks.classList.remove('open');
+        menuButton.setAttribute('aria-expanded', 'false');
+        menuButton.textContent = '☰';
+      }
+    });
+
+    const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (reducedMotion || !('IntersectionObserver' in window)) {
+      document.querySelectorAll('.reveal').forEach(el => el.classList.add('visible'));
+    } else {
+      const observer = new IntersectionObserver(entries => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('visible');
+            observer.unobserve(entry.target);
+          }
+        });
+      }, { threshold: .12 });
+      document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+    }
+  </script>
+</body>
+</html>
