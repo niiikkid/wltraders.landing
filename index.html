@@ -276,8 +276,8 @@
     .hero {
       min-height: calc(100svh - 74px);
       display: flex;
-      align-items: center;
-      padding: 110px 0 100px;
+      align-items: flex-start;
+      padding: 38px 0 100px;
       background:
         radial-gradient(circle at 82% 24%, rgba(102, 115, 146, .13) 0, rgba(25, 29, 39, .06) 19%, transparent 42%),
         radial-gradient(circle at 10% 90%, rgba(255,255,255,.035), transparent 32%),
@@ -306,11 +306,15 @@
       background: #fff;
       box-shadow: -180px 110px 0 rgba(255,255,255,.46), 130px 180px 0 rgba(255,255,255,.3), -80px 340px 0 rgba(255,255,255,.24), 220px 390px 0 rgba(255,255,255,.32);
     }
-    .hero-grid { grid-template-columns: minmax(0, 1fr); }
+    .hero-grid { grid-template-columns: minmax(0, 1fr); margin-top: 48px; }
     .hero-copy { position: relative; z-index: 2; max-width: 980px; }
-    h1 { max-width: 1000px; font-weight: 300; letter-spacing: -.075em; }
+    h1 { max-width: none; font-weight: 300; letter-spacing: -.075em; font-size: clamp(52px, 6.1vw, 92px); line-height: .98; }
     h1 span { color: #9aa1ad; }
-    .hero-copy > p { max-width: 680px; color: rgba(240,240,250,.66); }
+    .hero-copy > p { max-width: 680px; margin-top: 0; color: rgba(240,240,250,.66); }
+    .hero-points { list-style: none; margin: 18px 0 0; padding: 0; }
+    .hero-points li { display: flex; align-items: center; gap: 10px; padding: 3px 0; border-top: 1px solid var(--line); color: rgba(240, 240, 250, .72); font-size: 12.5px; }
+    .hero-points li:first-child { border-top: 0; }
+    .hero-points li::before { content: "·"; color: var(--ink); font-weight: 800; }
     .hero-note span::before { color: var(--ink); }
 
     .principles { background: #020203; }
@@ -354,6 +358,18 @@
       .hero-actions .button { width: 100%; }
       .audience-card { border-radius: 2px; }
     }
+
+    /* Rotating screenshots in hero */
+    @media (min-width: 981px) {
+      .hero-grid { grid-template-columns: minmax(0, 1fr) minmax(0, 1.27fr); gap: 64px; align-items: stretch; }
+      .hero-copy { display: flex; flex-direction: column; }
+      .hero-actions { margin-top: 26px; }
+      .hero-note { margin-top: auto; padding-top: 20px; }
+    }
+    .screen-viewer { position: relative; width: 100%; padding: 10px; border: 1px solid var(--line); border-radius: 2px; background: rgba(240, 240, 250, .025); display: flex; flex-direction: column; justify-content: center; }
+    .screen-stage { position: relative; aspect-ratio: 1600 / 776; overflow: hidden; border-radius: 2px; background: #08090c; cursor: pointer; }
+    .screen-stage img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: top; opacity: 0; transition: opacity .85s ease; filter: grayscale(0.72) contrast(1.06) brightness(1.02); }
+    .screen-stage img.active { opacity: 1; }
   </style>
   <script type="application/ld+json">
   {
@@ -390,21 +406,44 @@
 
   <main>
     <section class="hero">
-      <div class="container hero-grid">
-        <div class="hero-copy reveal">
+      <div class="container">
+        <div class="hero-head reveal">
           <span class="eyebrow">Open source · Self-hosted</span>
           <h1>Своя P2P-площадка. <span>На своих правилах.</span></h1>
-          <p>WLTraders — готовая основа для команды, которая хочет принимать P2P-платежи, проводить выплаты и управлять трейдерами в одной системе.</p>
-          <div class="hero-actions">
-            <a class="button primary" href="https://github.com/niiikkid/p2p.processing.traders" target="_blank" rel="noreferrer">Посмотреть исходный код <span aria-hidden="true">↗</span></a>
-            <a class="button" href="#capabilities">Что уже есть внутри</a>
+        </div>
+        <div class="hero-grid reveal">
+          <div class="hero-copy">
+            <p>WLTraders — готовая основа для команды, которая хочет принимать P2P-платежи, проводить выплаты и управлять трейдерами в одной системе.</p>
+            <ul class="hero-points">
+              <li>Приём P2P-платежей и выплаты</li>
+              <li>Кабинеты мерчанта, трейдера и поддержки</li>
+              <li>Споры, реквизиты и H2H API</li>
+            </ul>
+            <div class="hero-actions">
+              <a class="button primary" href="https://github.com/niiikkid/p2p.processing.traders" target="_blank" rel="noreferrer">Исходный код <span aria-hidden="true">↗</span></a>
+              <a class="button" href="#capabilities">Что уже есть внутри</a>
+            </div>
+            <div class="hero-note" aria-label="Ключевые свойства">
+              <span>На своём сервере</span>
+              <span>Под контролем владельца</span>
+            </div>
           </div>
-          <div class="hero-note" aria-label="Ключевые свойства">
-            <span>На своём сервере</span>
-            <span>Под контролем владельца</span>
+
+          <div class="screen-viewer" role="img" aria-label="Скриншоты интерфейса WLTraders">
+            <div class="screen-stage">
+              <img src="assets/screens/1.jpg" alt="" width="1600" height="776" class="active" decoding="async">
+              <img src="assets/screens/2.jpg" alt="" width="1600" height="776" decoding="async">
+              <img src="assets/screens/3.jpg" alt="" width="1600" height="776" decoding="async">
+              <img src="assets/screens/4.jpg" alt="" width="1600" height="776" decoding="async">
+              <img src="assets/screens/5.jpg" alt="" width="1600" height="776" decoding="async">
+              <img src="assets/screens/6.jpg" alt="" width="1600" height="776" decoding="async">
+              <img src="assets/screens/7.jpg" alt="" width="1600" height="776" decoding="async">
+              <img src="assets/screens/8.jpg" alt="" width="1600" height="776" decoding="async">
+              <img src="assets/screens/9.jpg" alt="" width="1600" height="776" decoding="async">
+              <img src="assets/screens/10.jpg" alt="" width="1600" height="776" decoding="async">
+            </div>
           </div>
         </div>
-
       </div>
     </section>
 
@@ -550,6 +589,26 @@
         });
       }, { threshold: .12 });
       document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+    }
+
+    const stage = document.querySelector('.screen-stage');
+    if (stage) {
+      const slides = stage.querySelectorAll('img');
+      let current = 0;
+      let timer = null;
+      const next = () => {
+        slides[current].classList.remove('active');
+        current = (current + 1) % slides.length;
+        slides[current].classList.add('active');
+      };
+      stage.addEventListener('click', () => {
+        next();
+        if (!reducedMotion) {
+          clearInterval(timer);
+          timer = setInterval(next, 4000);
+        }
+      });
+      if (!reducedMotion) timer = setInterval(next, 4000);
     }
   </script>
 </body>
