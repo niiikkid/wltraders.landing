@@ -12,15 +12,7 @@
   <meta property="og:description" content="Open source основа для запуска P2P-процессинга: мерчанты, трейдеры, сделки, выплаты, споры и расчёты в одной системе.">
 
   <meta name="twitter:card" content="summary">
-  <script>
-    (() => {
-      const queryMode = new URLSearchParams(location.search).get('mode');
-      const savedMode = localStorage.getItem('wlpay-site-mode');
-      document.documentElement.dataset.mode = queryMode === 'cascade' || (!queryMode && savedMode === 'cascade')
-        ? 'cascade'
-        : 'platform';
-    })();
-  </script>
+
   <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 64 64%22><rect width=%2264%22 height=%2264%22 rx=%2212%22 fill=%22%23000000%22/><path d=%22M13 18h8l6 25 5-18h7l5 18 5-25h8L49 49H40l-5-16-5 16h-9z%22 fill=%22%23f0f0fa%22/></svg>">
   <style>
     :root {
@@ -103,28 +95,6 @@
     .button.primary:hover { background: var(--accent-strong); border-color: var(--accent-strong); }
     .menu-button { display: none; width: 46px; height: 46px; padding: 0; border: 1px solid var(--line); border-radius: 50%; color: var(--ink); background: transparent; }
 
-    .mode-switch {
-      min-height: 38px;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      gap: 8px;
-      padding: 0 14px;
-      border: 1px solid rgba(85, 215, 255, .62);
-      color: #061217 !important;
-      background: #55d7ff;
-      box-shadow: 0 0 0 1px rgba(85, 215, 255, .13), 0 0 25px rgba(85, 215, 255, .2);
-      font-family: var(--display);
-      font-size: 11px;
-      letter-spacing: .08em;
-      text-transform: uppercase;
-      transition: transform .2s ease, background .2s ease, box-shadow .2s ease;
-    }
-    .mode-switch:hover { transform: translateY(-2px); background: #a9edff; box-shadow: 0 0 34px rgba(85, 215, 255, .34); }
-    .mode-switch .question { width: 20px; height: 20px; display: grid; place-items: center; border: 1px solid rgba(6,18,23,.3); border-radius: 50%; font-weight: 800; }
-
-    html[data-mode="platform"] .cascade-mode,
-    html[data-mode="cascade"] .open-mode { display: none !important; }
 
     .hero { position: relative; overflow: hidden; padding: 104px 0 82px; }
     .hero::after {
@@ -267,7 +237,7 @@
       .nav-links { position: absolute; left: 14px; right: 14px; top: 72px; display: none; padding: 16px; flex-direction: column; align-items: stretch; gap: 4px; border: 1px solid var(--line); border-radius: 18px; background: #171b15; box-shadow: 0 20px 50px rgba(0,0,0,.35); }
       .nav-links.open { display: flex; }
       .nav-links a { min-height: 46px; display: flex; align-items: center; padding: 0 12px; }
-      .nav-links .mode-switch { margin-top: 8px; padding-inline: 12px; }
+
       .nav .github-link { display: none; }
       .menu-button { display: grid; place-items: center; }
       .hero { padding: 66px 0 60px; }
@@ -375,101 +345,6 @@
 
     .reveal { opacity: 1; transform: none; }
 
-    /* Commercial cascade mode */
-    .cascade-hero {
-      min-height: calc(100svh - 74px);
-      display: flex;
-      align-items: center;
-      position: relative;
-      overflow: hidden;
-      padding: 110px 0 92px;
-      background:
-        linear-gradient(100deg, #000 0%, rgba(0,0,0,.96) 45%, rgba(0,0,0,.66) 100%),
-        radial-gradient(circle at 78% 37%, rgba(85,215,255,.18), transparent 31%),
-        #000;
-    }
-    .cascade-hero::before {
-      content: "";
-      position: absolute;
-      width: min(60vw, 820px);
-      aspect-ratio: 1;
-      right: -14vw;
-      top: 50%;
-      border: 1px solid rgba(85,215,255,.32);
-      border-radius: 50%;
-      transform: translateY(-50%);
-      box-shadow: 0 0 0 90px rgba(85,215,255,.026), 0 0 0 180px rgba(85,215,255,.016);
-      pointer-events: none;
-    }
-    .cascade-hero::after {
-      content: "";
-      position: absolute;
-      width: 8px;
-      height: 8px;
-      right: 25%;
-      top: 25%;
-      border-radius: 50%;
-      background: #55d7ff;
-      box-shadow: -190px 150px 0 rgba(85,215,255,.5), 140px 210px 0 rgba(255,255,255,.38), -60px 390px 0 rgba(255,255,255,.25);
-    }
-    .cascade-copy { position: relative; z-index: 2; max-width: 920px; }
-    .cascade-copy h1 { max-width: 900px; }
-    .cascade-copy h1 span { color: #55d7ff; }
-    .cascade-copy > p { max-width: 720px; color: rgba(240,240,250,.68); font-size: clamp(18px, 2vw, 22px); }
-    .cascade-copy .eyebrow, .cascade-page .eyebrow { color: #8ce5ff; }
-    .cascade-copy .eyebrow::before, .cascade-page .eyebrow::before { background: #55d7ff; box-shadow: 0 0 0 4px rgba(85,215,255,.12); }
-    .button.cascade-primary { color: #061217; background: #55d7ff; border-color: #55d7ff; }
-    .button.cascade-primary:hover { color: #000; background: #a9edff; border-color: #a9edff; }
-    .cascade-note span::before { color: #55d7ff; }
-
-    .cascade-strip { border-block: 1px solid rgba(85,215,255,.18); background: #020407; }
-    .cascade-strip .principle b { color: #dff8ff; }
-
-    .offer { background: #040609; }
-    .offer-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; border: 1px solid var(--line); background: var(--line); }
-    .offer-card { min-height: 320px; padding: 36px; display: flex; flex-direction: column; justify-content: space-between; background: #070a0e; }
-    .offer-card.featured { background: linear-gradient(145deg, rgba(85,215,255,.11), #070a0e 65%); }
-    .offer-card .num { color: #55d7ff; font: 12px/1 var(--display); letter-spacing: .14em; }
-    .offer-card h3 { margin-top: 60px; font-size: clamp(25px, 2.5vw, 35px); line-height: 1.08; font-weight: 400; }
-    .offer-card p { margin: 18px 0 0; color: var(--muted); font-size: 15px; }
-
-    .delivery { background: #000; }
-    .delivery-grid { display: grid; grid-template-columns: .78fr 1.22fr; gap: 80px; }
-    .delivery-intro { position: sticky; top: 112px; align-self: start; }
-    .delivery-intro h2 { margin-top: 18px; font-size: clamp(40px, 5vw, 67px); line-height: 1.02; font-weight: 300; letter-spacing: -.055em; }
-    .delivery-intro p { color: var(--muted); }
-    .delivery-list { border-top: 1px solid var(--line); counter-reset: delivery; }
-    .delivery-step { counter-increment: delivery; display: grid; grid-template-columns: 64px 1fr; gap: 12px; padding: 30px 0; border-bottom: 1px solid var(--line); }
-    .delivery-step::before { content: "0" counter(delivery); color: #55d7ff; font: 12px/1.5 var(--display); }
-    .delivery-step h3 { font-size: 23px; font-weight: 400; }
-    .delivery-step p { margin: 8px 0 0; color: var(--muted); font-size: 15px; }
-
-    .commercial-offer { border-block: 1px solid rgba(85,215,255,.22); background: linear-gradient(120deg, #031017, #000 62%); }
-    .commercial-grid { display: grid; grid-template-columns: 1.2fr .8fr; gap: 70px; align-items: center; }
-    .commercial-offer h2 { margin-top: 20px; max-width: 760px; font-size: clamp(43px, 5.6vw, 76px); line-height: 1; font-weight: 300; letter-spacing: -.06em; }
-    .commercial-offer p { max-width: 660px; color: rgba(240,240,250,.67); }
-    .offer-note { padding: 30px; border: 1px solid rgba(85,215,255,.26); background: rgba(85,215,255,.055); }
-    .offer-note strong { display: block; color: #8ce5ff; font: 13px/1.4 var(--display); letter-spacing: .12em; text-transform: uppercase; }
-    .offer-note ul { margin: 20px 0 0; padding: 0; list-style: none; }
-    .offer-note li { padding: 11px 0; border-top: 1px solid var(--line); color: rgba(240,240,250,.75); font-size: 15px; }
-
-    .cascade-contact { padding: 110px 0; text-align: left; }
-    .contact-panel { position: relative; overflow: hidden; padding: clamp(34px, 6vw, 76px); border: 1px solid rgba(85,215,255,.28); background: #05080c; }
-    .contact-panel::after { content: "?"; position: absolute; right: 4%; top: 50%; color: rgba(85,215,255,.06); font: 300 clamp(180px, 24vw, 330px)/1 var(--display); transform: translateY(-50%); pointer-events: none; }
-    .contact-panel > * { position: relative; z-index: 1; }
-    .contact-panel h2 { margin-top: 18px; max-width: 780px; font-size: clamp(42px, 6vw, 78px); line-height: 1; font-weight: 300; letter-spacing: -.06em; }
-    .contact-panel p { max-width: 630px; color: var(--muted); }
-    .telegram-placeholder { cursor: not-allowed; opacity: .78; }
-
-    .cascade-page footer { background: #000; }
-
-    @media (max-width: 980px) {
-      .offer-grid { grid-template-columns: 1fr; }
-      .offer-card { min-height: 250px; }
-      .delivery-grid, .commercial-grid { grid-template-columns: 1fr; gap: 42px; }
-      .delivery-intro { position: static; }
-    }
-
     @media (max-width: 760px) {
       .nav-links { border-radius: 2px; background: #08090c; box-shadow: none; }
       .hero { min-height: auto; padding: 80px 0 86px; }
@@ -478,12 +353,6 @@
       h1 { font-size: clamp(42px, 12vw, 54px); letter-spacing: -.07em; }
       .hero-actions .button { width: 100%; }
       .audience-card { border-radius: 2px; }
-      .cascade-hero { min-height: auto; padding: 82px 0 78px; }
-      .cascade-hero::before { width: 580px; right: -430px; }
-      .cascade-hero::after { right: 9%; }
-      .offer-card { min-height: 230px; padding: 28px; }
-      .offer-card h3 { margin-top: 35px; }
-      .contact-panel .button { width: 100%; }
     }
   </style>
   <script type="application/ld+json">
@@ -507,25 +376,19 @@
         <span>WLPay<small>P2P processing</small></span>
       </a>
       <nav class="nav-links" id="nav-links" aria-label="Основная навигация">
-        <a class="open-mode" href="#audience">Для кого</a>
-        <a class="open-mode" href="#capabilities">Возможности</a>
-        <a class="open-mode" href="#flow">Как работает</a>
-        <a class="open-mode" href="#opensource">Исходный код</a>
-        <a class="cascade-mode" href="#cascade-offer">Предложение</a>
-        <a class="cascade-mode" href="#cascade-process">Как подключаем</a>
-        <a class="cascade-mode" href="#cascade-contact">Связаться</a>
-        <a class="mode-switch open-mode" href="?mode=cascade" data-switch-mode="cascade"><span class="question" aria-hidden="true">?</span> Нужен каскад?</a>
-        <a class="mode-switch cascade-mode" href="./" data-switch-mode="platform">Нужна панель трейдеров</a>
+        <a href="#audience">Для кого</a>
+        <a href="#capabilities">Возможности</a>
+        <a href="#flow">Как работает</a>
+        <a href="#opensource">Исходный код</a>
       </nav>
-      <a class="github-link open-mode" href="https://github.com/niiikkid/p2p.processing.traders" target="_blank" rel="noreferrer">
+      <a class="github-link" href="https://github.com/niiikkid/p2p.processing.traders" target="_blank" rel="noreferrer">
         GitHub <span aria-hidden="true">↗</span>
       </a>
-      <a class="github-link cascade-mode" href="#cascade-contact">Telegram <span aria-hidden="true">↘</span></a>
       <button class="menu-button" type="button" aria-label="Открыть меню" aria-expanded="false" aria-controls="nav-links">☰</button>
     </div>
   </header>
 
-  <main class="open-mode">
+  <main>
     <section class="hero">
       <div class="container hero-grid">
         <div class="hero-copy reveal">
@@ -648,106 +511,7 @@
     </section>
   </main>
 
-  <main class="cascade-mode cascade-page" hidden>
-    <section class="cascade-hero">
-      <div class="container">
-        <div class="cascade-copy reveal">
-          <span class="eyebrow">Платёжная оркестрация · Под ключ</span>
-          <h1>Нужен платёжный каскад? <span>Соберём рабочий контур.</span></h1>
-          <p>Подключим мерчантов и платёжных провайдеров, настроим правила маршрутизации и дадим команде одну панель для контроля всех сделок.</p>
-          <div class="hero-actions">
-            <a class="button cascade-primary" href="#cascade-contact">Обсудить задачу в Telegram</a>
-            <a class="button" href="#cascade-offer">Что входит в работу</a>
-          </div>
-          <div class="hero-note cascade-note" aria-label="Ключевые свойства">
-            <span>Под вашу схему работы</span>
-            <span>Без привязки к одному провайдеру</span>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <div class="principles cascade-strip">
-      <div class="container principles-grid">
-        <div class="principle"><b>Один вход для мерчанта</b><span>Мерчант подключается один раз, а провайдеров может быть несколько.</span></div>
-        <div class="principle"><b>Автоматический маршрут</b><span>Сделка идёт туда, где она с большей вероятностью будет обработана.</span></div>
-        <div class="principle"><b>Весь путь под контролем</b><span>Статусы, ошибки, балансы и результаты видны в одной панели.</span></div>
-      </div>
-    </div>
-
-    <section class="offer" id="cascade-offer">
-      <div class="container">
-        <div class="section-head reveal">
-          <span class="eyebrow">Что предлагаем</span>
-          <div><h2>Не ещё одна интеграция. Слой управления над всеми.</h2><p>Каскад становится единой точкой между мерчантом и провайдерами: принимает заявку, выбирает маршрут, переключает при сбое и собирает результат.</p></div>
-        </div>
-        <div class="offer-grid reveal">
-          <article class="offer-card featured"><span class="num">01 · ИНТЕГРАЦИИ</span><div><h3>Подключение ваших провайдеров</h3><p>Разбираем API, приводим ответы к единому формату и прячем различия между провайдерами от мерчанта.</p></div></article>
-          <article class="offer-card"><span class="num">02 · ЛОГИКА</span><div><h3>Правила выбора и переключения</h3><p>Настраиваем приоритеты, лимиты, валюты, суммы, доступность и запасной маршрут для каждой сделки.</p></div></article>
-          <article class="offer-card"><span class="num">03 · КОНТРОЛЬ</span><div><h3>Панель для операционной команды</h3><p>Показываем сделки, конверсию, причины отказов, балансы и состояние подключений в одном месте.</p></div></article>
-        </div>
-      </div>
-    </section>
-
-    <section class="delivery" id="cascade-process">
-      <div class="container delivery-grid">
-        <div class="delivery-intro reveal">
-          <span class="eyebrow">Как начинаем</span>
-          <h2>От вашей схемы до первого рабочего потока.</h2>
-          <p>Точный объём и цена появляются после короткого разбора. Сначала выясняем, кого и как нужно соединить.</p>
-        </div>
-        <div class="delivery-list reveal">
-          <article class="delivery-step"><div><h3>Разбираем текущий поток</h3><p>Какие мерчанты, провайдеры, валюты, статусы и ограничения уже есть.</p></div></article>
-          <article class="delivery-step"><div><h3>Фиксируем первый этап</h3><p>Выбираем минимальный набор интеграций и правил, который уже даст рабочий результат.</p></div></article>
-          <article class="delivery-step"><div><h3>Подключаем и проверяем</h3><p>Собираем интеграции, тестируем успешные и ошибочные сценарии, настраиваем наблюдение.</p></div></article>
-          <article class="delivery-step"><div><h3>Запускаем и развиваем</h3><p>Передаём рабочий контур и добавляем новые маршруты по мере роста нагрузки.</p></div></article>
-        </div>
-      </div>
-    </section>
-
-    <section class="commercial-offer">
-      <div class="container commercial-grid">
-        <div class="reveal">
-          <span class="eyebrow">Черновик предложения</span>
-          <h2>Первый этап — понятный и измеримый.</h2>
-          <p>Вместо большой разработки «на будущее» начинаем с одного рабочего маршрута. После запуска видно, что улучшать и какие подключения добавлять следующими.</p>
-        </div>
-        <aside class="offer-note reveal">
-          <strong>Базовый состав</strong>
-          <ul>
-            <li>разбор требований и схема потока;</li>
-            <li>единый API для мерчанта;</li>
-            <li>подключение согласованных провайдеров;</li>
-            <li>правила каскада и резервный маршрут;</li>
-            <li>панель контроля и журнал ошибок;</li>
-            <li>запуск и передача документации.</li>
-          </ul>
-        </aside>
-      </div>
-    </section>
-
-    <section class="cascade-contact" id="cascade-contact">
-      <div class="container">
-        <div class="contact-panel reveal">
-          <span class="eyebrow">Следующий шаг</span>
-          <h2>Опишите задачу одним сообщением.</h2>
-          <p>Напишите, сколько у вас мерчантов и провайдеров, какие валюты используются и что сейчас мешает обработке платежей. Этого достаточно, чтобы начать разговор.</p>
-          <div class="hero-actions">
-            <a class="button cascade-primary telegram-placeholder" href="#" aria-disabled="true" title="Telegram-ссылка будет добавлена позже">Написать в Telegram · скоро</a>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <footer>
-      <div class="container footer-row">
-        <div>WLPay · Платёжный каскад и интеграции</div>
-        <div class="footer-links"><a href="#top">Наверх ↑</a><a href="./" data-switch-mode="platform">Панель трейдеров</a></div>
-      </div>
-    </footer>
-  </main>
-
-  <footer class="open-mode">
+  <footer>
     <div class="container footer-row">
       <div>WLPay · Open source P2P processing platform</div>
       <div class="footer-links"><a href="#top">Наверх ↑</a><a href="https://github.com/niiikkid/p2p.processing.traders" target="_blank" rel="noreferrer">GitHub ↗</a></div>
@@ -758,58 +522,6 @@
     const header = document.querySelector('.site-header');
     const menuButton = document.querySelector('.menu-button');
     const navLinks = document.querySelector('.nav-links');
-    const description = document.querySelector('meta[name="description"]');
-    const modeStorageKey = 'wlpay-site-mode';
-
-    const modeCopy = {
-      platform: {
-        title: 'WLPay — open source P2P-процессинг для своей площадки',
-        description: 'WLPay — self-hosted P2P-процессинг с открытым исходным кодом для команд, которые хотят запустить собственную площадку для приёма платежей и выплат.'
-      },
-      cascade: {
-        title: 'WLPay — платёжный каскад и интеграции под ключ',
-        description: 'Подключение платёжных провайдеров, единый API для мерчантов, правила каскада и панель контроля сделок.'
-      }
-    };
-
-    function applyMode(mode, updateHistory = false) {
-      const nextMode = mode === 'cascade' ? 'cascade' : 'platform';
-      document.documentElement.dataset.mode = nextMode;
-      document.querySelector('main.open-mode').hidden = nextMode !== 'platform';
-      document.querySelector('main.cascade-mode').hidden = nextMode !== 'cascade';
-      localStorage.setItem(modeStorageKey, nextMode);
-      document.title = modeCopy[nextMode].title;
-      description.setAttribute('content', modeCopy[nextMode].description);
-
-      if (updateHistory) {
-        const url = new URL(location.href);
-        if (nextMode === 'cascade') url.searchParams.set('mode', 'cascade');
-        else url.searchParams.delete('mode');
-        history.pushState({ mode: nextMode }, '', `${url.pathname}${url.search}${url.hash}`);
-      }
-
-      navLinks.classList.remove('open');
-      menuButton.setAttribute('aria-expanded', 'false');
-      menuButton.textContent = '☰';
-      scrollTo({ top: 0, behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth' });
-    }
-
-    document.querySelectorAll('[data-switch-mode]').forEach(link => {
-      link.addEventListener('click', event => {
-        event.preventDefault();
-        applyMode(link.dataset.switchMode, true);
-      });
-    });
-
-    document.querySelectorAll('.telegram-placeholder').forEach(link => {
-      link.addEventListener('click', event => event.preventDefault());
-    });
-
-    addEventListener('popstate', () => {
-      applyMode(new URLSearchParams(location.search).get('mode') === 'cascade' ? 'cascade' : 'platform');
-    });
-
-    applyMode(document.documentElement.dataset.mode);
 
     addEventListener('scroll', () => header.classList.toggle('scrolled', scrollY > 8), { passive: true });
     menuButton.addEventListener('click', () => {
