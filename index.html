@@ -6,16 +6,29 @@
   <title>WLTraders — open source P2P-процессинг для своей площадки</title>
   <meta name="description" content="WLTraders — self-hosted P2P-процессинг с открытым исходным кодом для команд, которые хотят запустить собственную площадку для приёма платежей и выплат.">
   <meta name="keywords" content="P2P процессинг, P2P платформа, платформа для трейдеров, платформа для мерчантов, P2P acquiring, P2P payment processing, self-hosted payment platform, merchant API, выплаты, USDT processing">
+  <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
+  <meta name="googlebot" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
   <meta name="theme-color" content="#000000">
+  <link rel="canonical" href="https://wltraders.pro/">
+  <link rel="alternate" hreflang="ru" href="https://wltraders.pro/">
+  <link rel="alternate" hreflang="x-default" href="https://wltraders.pro/">
+
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="WLTraders">
   <meta property="og:locale" content="ru_RU">
+  <meta property="og:url" content="https://wltraders.pro/">
   <meta property="og:title" content="WLTraders — своя P2P-площадка на своих правилах">
   <meta property="og:description" content="Open source основа для запуска P2P-процессинга: мерчанты, трейдеры, сделки, выплаты, споры и расчёты в одной системе.">
+  <meta property="og:image" content="https://wltraders.pro/assets/social/wltraders-og.jpg">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="Панель управления P2P-платформой WLTraders">
 
-  <meta name="twitter:card" content="summary">
+  <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="WLTraders — своя P2P-площадка на своих правилах">
   <meta name="twitter:description" content="Open source основа для запуска P2P-процессинга: мерчанты, трейдеры, сделки, выплаты, споры и расчёты в одной системе.">
+  <meta name="twitter:image" content="https://wltraders.pro/assets/social/wltraders-og.jpg">
+  <meta name="twitter:image:alt" content="Панель управления P2P-платформой WLTraders">
 
   <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 64 64%22><rect width=%2264%22 height=%2264%22 rx=%2212%22 fill=%22%23000000%22/><path d=%22M13 18h8l6 25 5-18h7l5 18 5-25h8L49 49H40l-5-16-5 16h-9z%22 fill=%22%23f0f0fa%22/></svg>">
   <style>
@@ -436,14 +449,65 @@
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
-    "@type": "SoftwareApplication",
-    "name": "WLTraders",
-    "applicationCategory": "FinanceApplication",
-    "operatingSystem": "Self-hosted",
-    "description": "Open source P2P payment processing platform for merchants and traders.",
-    "url": "https://github.com/niiikkid/wl.traders.p2p",
-    "codeRepository": "https://github.com/niiikkid/wl.traders.p2p",
-    "isAccessibleForFree": true
+    "@graph": [
+      {
+        "@type": "Organization",
+        "@id": "https://wltraders.pro/#organization",
+        "name": "WLTraders",
+        "url": "https://wltraders.pro/",
+        "sameAs": [
+          "https://github.com/niiikkid/wl.traders.p2p",
+          "https://t.me/n1kkid"
+        ]
+      },
+      {
+        "@type": "WebSite",
+        "@id": "https://wltraders.pro/#website",
+        "url": "https://wltraders.pro/",
+        "name": "WLTraders",
+        "inLanguage": "ru-RU",
+        "publisher": { "@id": "https://wltraders.pro/#organization" }
+      },
+      {
+        "@type": "SoftwareApplication",
+        "@id": "https://wltraders.pro/#software",
+        "name": "WLTraders",
+        "applicationCategory": "FinanceApplication",
+        "operatingSystem": "Self-hosted",
+        "inLanguage": "ru-RU",
+        "description": "Open source P2P payment processing platform for merchants and traders.",
+        "url": "https://wltraders.pro/",
+        "codeRepository": "https://github.com/niiikkid/wl.traders.p2p",
+        "isAccessibleForFree": true,
+        "publisher": { "@id": "https://wltraders.pro/#organization" }
+      },
+      {
+        "@type": "FAQPage",
+        "@id": "https://wltraders.pro/#faq",
+        "mainEntity": [
+          {
+            "@type": "Question",
+            "name": "Это готовый сервис или исходный код?",
+            "acceptedAnswer": { "@type": "Answer", "text": "Это исходный код self-hosted платформы. Его нужно развернуть на своём сервере, настроить инфраструктуру и подключить нужные вашей команде интеграции." }
+          },
+          {
+            "@type": "Question",
+            "name": "Кому подходит WLTraders?",
+            "acceptedAnswer": { "@type": "Answer", "text": "Трейдерским командам, мерчантам и операторам процессинга, которые знакомы с P2P-рынком и хотят запустить собственную площадку." }
+          },
+          {
+            "@type": "Question",
+            "name": "Можно ли подключать мерчантов по API?",
+            "acceptedAnswer": { "@type": "Answer", "text": "Да. В платформе есть H2H API, callback-уведомления и журнал запросов для связи с внешними системами." }
+          },
+          {
+            "@type": "Question",
+            "name": "Где хранятся данные?",
+            "acceptedAnswer": { "@type": "Answer", "text": "Платформа разворачивается в инфраструктуре владельца. Конкретная схема хранения и защиты зависит от вашей серверной конфигурации." }
+          }
+        ]
+      }
+    ]
   }
   </script>
 </head>
