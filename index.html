@@ -403,24 +403,6 @@
     .screen-stage { position: relative; width: 100%; aspect-ratio: 1600 / 776; overflow: hidden; padding: 0; border: 0; border-radius: 2px; color: inherit; background: #08090c; cursor: pointer; text-align: initial; }
     .screen-stage img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: top; opacity: 0; transition: opacity .85s ease; filter: grayscale(0.72) contrast(1.06) brightness(1.02); }
     .screen-stage img.active { opacity: 1; }
-    .screen-toggle {
-      position: absolute;
-      z-index: 2;
-      right: 18px;
-      bottom: 18px;
-      min-height: 38px;
-      padding: 0 13px;
-      border: 1px solid rgba(240,240,250,.28);
-      border-radius: 2px;
-      color: var(--ink);
-      background: rgba(0,0,0,.72);
-      backdrop-filter: blur(10px);
-      font: 11px/1 var(--display);
-      letter-spacing: .08em;
-      text-transform: uppercase;
-      cursor: pointer;
-    }
-    .screen-toggle:hover { background: rgba(240,240,250,.14); border-color: rgba(240,240,250,.5); }
 
     /* Help / contact */
     .help { padding: 140px 0 130px; background: #020203; border-top: 1px solid var(--line); }
@@ -520,7 +502,6 @@
               <img src="assets/screens/9.jpg" alt="Интерфейс WLTraders — экран 9" width="1600" height="776" loading="lazy" decoding="async" aria-hidden="true">
               <img src="assets/screens/10.jpg" alt="Интерфейс WLTraders — экран 10" width="1600" height="776" loading="lazy" decoding="async" aria-hidden="true">
             </button>
-            <button class="screen-toggle" type="button">Пауза</button>
           </div>
         </div>
       </div>
@@ -812,12 +793,10 @@
     }
 
     const stage = document.querySelector('.screen-stage');
-    const screenToggle = document.querySelector('.screen-toggle');
-    if (stage && screenToggle) {
+    if (stage) {
       const slides = stage.querySelectorAll('img');
       let current = 0;
       let timer = null;
-      let playing = false;
       const updateStageLabel = () => {
         stage.setAttribute('aria-label', `Показать следующий скриншот. Сейчас: ${slides[current].alt}, ${current + 1} из ${slides.length}`);
       };
@@ -829,32 +808,15 @@
         slides[current].setAttribute('aria-hidden', 'false');
         updateStageLabel();
       };
-      const start = () => {
-        if (reducedMotion) return;
-        clearInterval(timer);
-        timer = setInterval(next, 4000);
-        playing = true;
-        screenToggle.textContent = 'Пауза';
-        screenToggle.setAttribute('aria-label', 'Приостановить смену скриншотов');
-      };
-      const stop = () => {
-        clearInterval(timer);
-        timer = null;
-        playing = false;
-        screenToggle.textContent = 'Продолжить';
-        screenToggle.setAttribute('aria-label', 'Продолжить смену скриншотов');
-      };
       stage.addEventListener('click', () => {
         next();
-        if (playing) start();
+        if (!reducedMotion) {
+          clearInterval(timer);
+          timer = setInterval(next, 4000);
+        }
       });
-      screenToggle.addEventListener('click', () => playing ? stop() : start());
       updateStageLabel();
-      if (reducedMotion) {
-        screenToggle.hidden = true;
-      } else {
-        start();
-      }
+      if (!reducedMotion) timer = setInterval(next, 4000);
     }
   </script>
 </body>
