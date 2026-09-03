@@ -306,6 +306,15 @@
       background: #fff;
       box-shadow: -180px 110px 0 rgba(255,255,255,.46), 130px 180px 0 rgba(255,255,255,.3), -80px 340px 0 rgba(255,255,255,.24), 220px 390px 0 rgba(255,255,255,.32);
     }
+    .starfield {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 1;
+    }
+    .hero > .container { position: relative; z-index: 2; }
     .hero-grid { grid-template-columns: minmax(0, 1fr); margin-top: 48px; }
     .hero-copy { position: relative; z-index: 2; max-width: 980px; }
     h1 { max-width: none; font-weight: 300; letter-spacing: -.075em; font-size: clamp(52px, 6.1vw, 92px); line-height: .98; }
@@ -453,6 +462,7 @@
 
   <main>
     <section class="hero">
+      <canvas class="starfield" aria-hidden="true"></canvas>
       <div class="container">
         <div class="hero-head reveal">
           <span class="eyebrow">Open source · Self-hosted</span>
@@ -626,6 +636,126 @@
   </footer>
 
   <script>
+    // Космический фон: звёзды, мерцание, лёгкий параллакс за курсором и редкие метеоры
+    const starCanvas = document.querySelector('.starfield');
+    if (starCanvas) {
+      const sctx = starCanvas.getContext('2d');
+      const sReduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+      const dpr = Math.min(window.devicePixelRatio || 1, 2);
+      let sw = 0, sh = 0;
+      const stars = [];
+      const STAR_COUNT = 280;
+      const srand = (a, b) => a + Math.random() * (b - a);
+
+      function buildStars() {
+        stars.length = 0;
+        for (let i = 0; i < STAR_COUNT; i++) {
+          stars.push({
+            x: Math.random(),
+            y: Math.random(),
+            r: srand(0.3, 1.7),
+            a: srand(0.16, 0.95),
+            phase: srand(0, Math.PI * 2),
+            speed: srand(0.35, 1.5),
+            depth: srand(0.4, 1.4)
+          });
+        }
+      }
+
+      function sizeCanvas() {
+        sw = starCanvas.clientWidth;
+        sh = starCanvas.clientHeight;
+        starCanvas.width = Math.round(sw * dpr);
+        starCanvas.height = Math.round(sh * dpr);
+        sctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      }
+
+      let px = 0, py = 0, tx = 0, ty = 0;
+      addEventListener('pointermove', e => {
+        tx = (e.clientX / innerWidth - 0.5) * 2;
+        ty = (e.clientY / innerHeight - 0.5) * 2;
+      }, { passive: true });
+
+      let meteor = null;
+
+      function drawStars(now) {
+        sctx.clearRect(0, 0, sw, sh);
+        px += (tx - px) * 0.04;
+        py += (ty - py) * 0.04;
+        for (const s of stars) {
+          const tw = sReduced ? 1 : 0.45 + 0.55 * Math.sin(now * 0.001 * s.speed + s.phase);
+          const alpha = s.a * tw;
+          const x = s.x * sw + px * 12 * s.depth;
+          const y = s.y * sh + py * 12 * s.depth;
+          if (s.r > 1.35 && alpha > 0.5) {
+            sctx.beginPath();
+            sctx.arc(x, y, s.r * 2.4, 0, Math.PI * 2);
+            sctx.fillStyle = 'rgba(255,255,255,' + (alpha * 0.16).toFixed(3) + ')';
+            sctx.fill();
+          }
+          sctx.beginPath();
+          sctx.arc(x, y, s.r, 0, Math.PI * 2);
+          sctx.fillStyle = 'rgba(255,255,255,' + alpha.toFixed(3) + ')';
+          sctx.fill();
+        }
+      }
+
+      function drawMeteor() {
+        if (sReduced) return;
+        if (!meteor && Math.random() < 0.006) {
+          const fromTop = Math.random() < 0.6;
+          meteor = {
+            x: srand(sw * 0.3, sw * 0.95),
+            y: fromTop ? srand(0, sh * 0.2) : srand(0, sh * 0.6),
+            vx: srand(-3.5, -2.2),
+            vy: srand(1.6, 2.8),
+            life: 1
+          };
+        }
+        if (meteor) {
+          meteor.x += meteor.vx;
+          meteor.y += meteor.vy;
+          meteor.life -= 0.012;
+          if (meteor.life <= 0) { meteor = null; return; }
+          const tail = 26;
+          const g = sctx.createLinearGradient(meteor.x, meteor.y, meteor.x - meteor.vx * tail, meteor.y - meteor.vy * tail);
+          g.addColorStop(0, 'rgba(255,255,255,' + meteor.life.toFixed(3) + ')');
+          g.addColorStop(1, 'rgba(255,255,255,0)');
+          sctx.strokeStyle = g;
+          sctx.lineWidth = 1.4;
+          sctx.lineCap = 'round';
+          sctx.beginPath();
+          sctx.moveTo(meteor.x, meteor.y);
+          sctx.lineTo(meteor.x - meteor.vx * tail, meteor.y - meteor.vy * tail);
+          sctx.stroke();
+        }
+      }
+
+      let sraf = 0;
+      function starLoop(now) {
+        drawStars(now);
+        drawMeteor();
+        sraf = requestAnimationFrame(starLoop);
+      }
+
+      sizeCanvas();
+      buildStars();
+      if (sReduced) {
+        drawStars(0);
+      } else {
+        sraf = requestAnimationFrame(starLoop);
+      }
+
+      addEventListener('resize', sizeCanvas);
+      document.addEventListener('visibilitychange', () => {
+        if (document.hidden) {
+          cancelAnimationFrame(sraf);
+        } else if (!sReduced) {
+          sraf = requestAnimationFrame(starLoop);
+        }
+      });
+    }
+
     const header = document.querySelector('.site-header');
     const menuButton = document.querySelector('.menu-button');
     const navLinks = document.querySelector('.nav-links');
