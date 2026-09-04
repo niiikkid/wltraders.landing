@@ -29,11 +29,7 @@ chmod +x deploy/install-analytics.sh
 ./deploy/install-analytics.sh
 ```
 
-Затем добавьте директивы из `deploy/wltraders-analytics-nginx.conf` в действующий HTTPS server block для `wltraders.pro` и выполните:
-
-```bash
-nginx -t && systemctl reload nginx
-```
+Скрипт сам заменит статический `location /` в действующем nginx-сайте на прокси к локальному сервису, проверит `nginx -t` и перезагрузит nginx. Если проверка не пройдёт, исходный конфиг восстанавливается из резервной копии.
 
 Проверка и отчёт доступны через SSH:
 
