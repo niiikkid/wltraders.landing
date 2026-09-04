@@ -6,9 +6,9 @@ After=network.target
 Type=simple
 User=www-data
 Group=www-data
-WorkingDirectory=/var/www/wltraders.landing
+WorkingDirectory=/opt/wltraders-landing
 Environment=ANALYTICS_DB=/var/lib/wltraders-analytics/visitors.sqlite3
-ExecStart=/usr/bin/python3 /var/www/wltraders.landing/analytics_server.py --host 127.0.0.1 --port 8090
+ExecStart=/usr/bin/python3 /opt/wltraders-landing/analytics_server.py --host 127.0.0.1 --port 8090
 Restart=always
 RestartSec=3
 StateDirectory=wltraders-analytics
@@ -16,7 +16,7 @@ NoNewPrivileges=true
 PrivateTmp=true
 ProtectSystem=strict
 ProtectHome=true
-ReadOnlyPaths=/var/www/wltraders.landing
+ReadOnlyPaths=/opt/wltraders-landing
 
 [Install]
 WantedBy=multi-user.target

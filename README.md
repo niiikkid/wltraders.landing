@@ -39,7 +39,7 @@ nginx -t && systemctl reload nginx
 
 ```bash
 curl -f http://127.0.0.1:8090/health
-python3 /var/www/wltraders.landing/analytics_report.py
+python3 /opt/wltraders-landing/analytics_report.py
 ```
 
 База счётчиков находится в `/var/lib/wltraders-analytics/visitors.sqlite3`; она не затрагивается при `git pull`.
