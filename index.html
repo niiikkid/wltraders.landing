@@ -633,6 +633,29 @@
     .cascade-screen-viewer .screen-stage { aspect-ratio: 1600 / 648; }
     .cascade-screen-viewer .screen-stage img { filter: none; }
 
+    /* WLTraders uses the same restrained accent system as Cortex, in its own green. */
+    .mode-platform {
+      --platform-primary: oklch(86.133% .141 139.549);
+      --platform-primary-soft: color-mix(in srgb, var(--platform-primary) 10%, transparent);
+      --platform-primary-border: color-mix(in srgb, var(--platform-primary) 35%, transparent);
+    }
+    html:not([data-mode="cascade"]) .site-header { background: rgb(5 13 6 / .84); }
+    .mode-platform .hero { background: radial-gradient(circle at 75% 23%, color-mix(in srgb, var(--platform-primary) 14%, transparent), transparent 30%), #000; }
+    .mode-platform .hero h1 span { color: var(--platform-primary); }
+    .mode-platform .eyebrow { color: color-mix(in srgb, var(--platform-primary) 72%, white); }
+    .mode-platform .eyebrow::before { background: var(--platform-primary); box-shadow: 0 0 0 4px var(--platform-primary-soft), 0 0 24px color-mix(in srgb, var(--platform-primary) 25%, transparent); }
+    .mode-platform .button.primary { color: #09090b; border-color: var(--platform-primary); background: var(--platform-primary); }
+    .mode-platform .button.primary:hover { color: #09090b; border-color: var(--platform-primary); background: var(--platform-primary); filter: brightness(1.04); }
+    .mode-platform .screen-viewer { border-color: var(--platform-primary-border); background: #091209; box-shadow: 0 35px 100px rgb(0 0 0 / .45), 0 0 60px color-mix(in srgb, var(--platform-primary) 10%, transparent); }
+    .mode-platform .audience .eyebrow, .mode-platform .open-source .eyebrow { color: color-mix(in srgb, var(--platform-primary) 52%, #0b1a0c); }
+    .mode-platform .audience .eyebrow::before, .mode-platform .open-source .eyebrow::before { background: var(--platform-primary); box-shadow: 0 0 0 5px var(--platform-primary-soft); }
+    .mode-platform .audience-card .number { color: color-mix(in srgb, var(--platform-primary) 56%, #0b1a0c); }
+    .mode-platform .flow-node.center { color: #09090b; border-color: var(--platform-primary); background: var(--platform-primary); }
+    .mode-platform .flow-node.center small, .mode-platform .flow-node.center p { color: color-mix(in srgb, #09090b 75%, transparent); }
+    .mode-platform .flow-arrow { background: color-mix(in srgb, var(--platform-primary) 52%, transparent); }
+    .mode-platform .flow-arrow::after { border-color: var(--platform-primary); }
+    .mode-platform .preview-wrap::before { background: color-mix(in srgb, var(--platform-primary) 10%, transparent); }
+
     @media (max-width: 980px) {
       .cascade-console { width: min(760px, 100%); }
     }
