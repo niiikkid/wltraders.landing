@@ -940,12 +940,12 @@
       <canvas class="starfield" aria-hidden="true"></canvas>
       <div class="container">
         <div class="hero-head reveal">
-          <span class="eyebrow">Payment aggregator · Multi-provider</span>
-          <h1>Один API. <span>Весь каскад провайдеров.</span></h1>
+          <span class="eyebrow">Платёжная оркестрация · Multi-provider</span>
+          <h1>Один API. <span>Свой каскад провайдеров.</span></h1>
         </div>
         <div class="hero-grid reveal">
           <div class="hero-copy">
-            <p>Cortex принимает pay-in от мерчанта, запускает настроенный каскад и возвращает реквизиты первого провайдера, который прошёл правила цены и качества.</p>
+            <p>Cortex — готовая основа для команды, которая хочет подключить несколько платёжных провайдеров, управлять маршрутами и видеть весь путь сделки в одной системе.</p>
             <div class="hero-actions">
               <a class="button primary" href="https://cascade.wltraders.pro/" target="_blank" rel="noopener noreferrer">Посмотреть демо <span aria-hidden="true">↗</span></a>
               <a class="button" href="https://t.me/n1kkid" target="_blank" rel="noopener noreferrer">Приобрести <span aria-hidden="true">↗</span></a>
@@ -972,9 +972,9 @@
 
     <div class="principles">
       <div class="container principles-grid">
-        <div class="principle"><b>Единый API</b><span>Мерчант подключается к Cortex, а не к каждому провайдеру отдельно.</span></div>
-        <div class="principle"><b>Управляемый каскад</b><span>Приоритетные, параллельные и резервные маршруты настраиваются из панели.</span></div>
-        <div class="principle"><b>Полная история</b><span>Попытки, ответы, отмены, статусы и финансовые движения остаются в системе.</span></div>
+        <div class="principle"><b>Одна интеграция</b><span>Мерчант работает с одним API, даже когда провайдеров несколько.</span></div>
+        <div class="principle"><b>Свои маршруты</b><span>Порядок, параллельные попытки и резерв меняются из вашей панели.</span></div>
+        <div class="principle"><b>Вся картина сделки</b><span>Запросы, попытки, статусы, споры и движение средств собраны вместе.</span></div>
       </div>
     </div>
 
@@ -983,23 +983,23 @@
         <div class="section-head reveal">
           <span class="eyebrow">Для кого</span>
           <div>
-            <h2>Когда одного провайдера уже недостаточно</h2>
-            <p>Cortex нужен командам, которые принимают P2P-платежи через несколько внешних провайдеров и хотят управлять маршрутизацией из одного контура.</p>
+            <h2>Для тех, кто не хочет зависеть от одного провайдера</h2>
+            <p>Cortex объединяет несколько провайдеров в один маршрут. Команда сама решает, кому отдать сделку и что делать, если первый вариант не сработал.</p>
           </div>
         </div>
         <div class="audience-grid">
           <article class="audience-card dark reveal">
-            <span class="number">01 · Мерчанты с несколькими провайдерами</span>
+            <span class="number">01 · Мерчанты и платёжные команды</span>
             <div>
-              <h3>Один контракт API вместо набора разных интеграций</h3>
-              <p>Создавайте pay-in через Cortex, меняйте порядок и состав провайдеров без переделки мерчантской интеграции.</p>
+              <h3>Когда объём уже нельзя держать на одной интеграции</h3>
+              <p>Подключайте новых провайдеров и меняйте их порядок, не переделывая API на стороне мерчанта.</p>
             </div>
           </article>
           <article class="audience-card reveal">
-            <span class="number">02 · Платёжные команды и агрегаторы</span>
+            <span class="number">02 · Процессинги и агрегаторы</span>
             <div>
-              <h3>Свой контроль маршрутов, маржи и качества</h3>
-              <p>Управляйте провайдерами, реквизитами, спорами, обеспечением и операционными рисками в собственной системе.</p>
+              <h3>Когда маршрутами нужно управлять самим</h3>
+              <p>Контролируйте порядок провайдеров, качество реквизитов, споры, балансы и результат каждой попытки.</p>
             </div>
           </article>
         </div>
@@ -1009,17 +1009,17 @@
     <section id="cascade-capabilities">
       <div class="container system-layout">
         <div class="system-intro reveal">
-          <span class="eyebrow">Внутри Cortex</span>
-          <h2>Каскад — это только начало.</h2>
-          <p>Платформа связывает API мерчанта, внешних провайдеров, финансы и операционную команду. Решение по каждой сделке можно проследить от запроса до результата.</p>
+          <span class="eyebrow">Что внутри</span>
+          <h2>Каскад, сделки и расчёты в одной системе</h2>
+          <p>Cortex связывает API мерчанта с провайдерами и сохраняет весь ход сделки. Команда видит, куда ушёл запрос, почему выбран этот маршрут и чем всё закончилось.</p>
         </div>
         <div class="capability-list reveal">
-          <article class="capability"><span class="num">01</span><div><h3>Три уровня маршрутизации</h3><p>Приоритетные провайдеры, параллельные группы и резервная очередь. Первый подходящий ответ становится победителем, остальные сделки отменяются.</p></div></article>
-          <article class="capability"><span class="num">02</span><div><h3>Правила для каждого мерчанта</h3><p>Общий каскад дополняется отдельными настройками проектов, лимитами ожидания и разрешёнными провайдерами.</p></div></article>
-          <article class="capability"><span class="num">03</span><div><h3>Цена и качество реквизитов</h3><p>Cortex проверяет фактическую цену провайдера, поддерживаемую пару, блокировки и показатели реквизита до выбора маршрута.</p></div></article>
-          <article class="capability"><span class="num">04</span><div><h3>Сделки, споры и документы</h3><p>Pay-in, статусы, изменение суммы, чеки и решения по спорам доступны в одном рабочем интерфейсе.</p></div></article>
-          <article class="capability"><span class="num">05</span><div><h3>Балансы и сверка обеспечения</h3><p>Кошельки и ledger показывают движение средств, а сверка сопоставляет финальные сделки с данными провайдера.</p></div></article>
-          <article class="capability"><span class="num">06</span><div><h3>Логи, аудит и уведомления</h3><p>Журналы H2H-запросов и действий пользователей помогают расследовать операции, а Telegram сообщает о важных событиях.</p></div></article>
+          <article class="capability"><span class="num">01</span><div><h3>Гибкая очередь провайдеров</h3><p>Сначала приоритетные маршруты, затем параллельные попытки и резерв. Порядок задаёте вы.</p></div></article>
+          <article class="capability"><span class="num">02</span><div><h3>Свой каскад для проекта</h3><p>Можно оставить общие правила или собрать отдельный маршрут под конкретного мерчанта.</p></div></article>
+          <article class="capability"><span class="num">03</span><div><h3>Проверка до выдачи реквизитов</h3><p>Cortex учитывает сумму, валюту, метод оплаты, стоимость маршрута и состояние реквизитов.</p></div></article>
+          <article class="capability"><span class="num">04</span><div><h3>Полная карточка сделки</h3><p>Статусы, реквизиты, попытки провайдеров, изменение суммы, чеки и споры находятся в одном месте.</p></div></article>
+          <article class="capability"><span class="num">05</span><div><h3>Понятные балансы</h3><p>Кошельки и журнал операций показывают, куда ушли деньги и из чего сложился итог сделки.</p></div></article>
+          <article class="capability"><span class="num">06</span><div><h3>Логи для разбора</h3><p>Запросы к провайдерам и действия команды сохраняются. Важные события можно отправлять в Telegram.</p></div></article>
         </div>
       </div>
     </section>
@@ -1028,55 +1028,36 @@
       <div class="container">
         <div class="section-head reveal">
           <span class="eyebrow">Как это работает</span>
-          <div><h2>Мерчант видит один простой маршрут</h2><p>Внутренняя гонка провайдеров остаётся внутри Cortex. Наружу возвращается понятный результат: реквизиты, контролируемый отказ или таймаут.</p></div>
+          <div><h2>Один запрос на входе. Один результат на выходе.</h2><p>Мерчанту не нужно знать, сколько провайдеров участвовало в сделке. Он получает реквизиты, отказ или таймаут через один API.</p></div>
         </div>
         <div class="flow-board reveal">
           <div class="flow-row">
-            <article class="flow-node"><small>Один запрос</small><div><h3>Мерчант</h3><p>Создаёт pay-in через единый H2H API.</p></div></article>
+            <article class="flow-node"><small>Запрос</small><div><h3>Мерчант</h3><p>Отправляет pay-in в Cortex.</p></div></article>
             <span class="flow-arrow" aria-hidden="true"></span>
-            <article class="flow-node center"><small>Маршрутизация</small><div><h3>Cortex</h3><p>Запускает каскад и проверяет каждый ответ.</p></div></article>
+            <article class="flow-node center"><small>Маршрут</small><div><h3>Cortex</h3><p>Проходит очередь и проверяет ответы.</p></div></article>
             <span class="flow-arrow" aria-hidden="true"></span>
-            <article class="flow-node"><small>Исполнение</small><div><h3>Провайдеры</h3><p>Первый подходящий маршрут отдаёт реквизиты.</p></div></article>
+            <article class="flow-node"><small>Результат</small><div><h3>Провайдер</h3><p>Возвращает подходящие реквизиты.</p></div></article>
           </div>
-          <p class="flow-caption">Поздние и проигравшие попытки отменяются отдельно и не меняют результат мерчанта.</p>
+          <p class="flow-caption">Как только маршрут найден, остальные попытки останавливаются или уходят на отмену.</p>
         </div>
       </div>
     </section>
 
-    <section class="preview" id="cascade-preview">
-      <div class="container">
-        <div class="section-head reveal">
-          <span class="eyebrow">Интерфейс</span>
-          <div><h2>Все роли в одной панели</h2><p>Администратор, поддержка, мерчант и провайдер получают свои разделы, данные и действия.</p></div>
-        </div>
-        <div class="preview-wrap reveal">
-          <div class="preview-frame">
-            <div class="cascade-placeholder" aria-label="Зарезервированное место для будущих скриншотов Cortex">
-              <div class="cascade-placeholder__copy">
-                <span>Место для изображений</span>
-                <strong>Скриншоты Cortex появятся здесь</strong>
-                <p>Блок уже подготовлен под карусель экранов. Изображения можно будет добавить отдельно, не меняя структуру страницы.</p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
 
     <section class="commercial" id="cascade-purchase">
       <div class="container open-grid">
         <div class="reveal">
-          <span class="eyebrow">Коммерческий продукт</span>
-          <h2>Приобрести Cortex для своей команды</h2>
-          <p>Cortex доступен как коммерческий продукт. Напишите напрямую, чтобы обсудить формат приобретения, запуск и нужные интеграции.</p>
-          <div class="hero-actions"><a class="button primary" href="https://t.me/n1kkid" target="_blank" rel="noopener noreferrer">Обсудить приобретение <span aria-hidden="true">↗</span></a></div>
+          <span class="eyebrow">Cortex для вашей команды</span>
+          <h2>Соберите свой контур приёма платежей</h2>
+          <p>Получите Cortex, разверните его в своей инфраструктуре и подключите нужных провайдеров. Детали поставки и запуска обсудим напрямую.</p>
+          <div class="hero-actions"><a class="button primary" href="https://t.me/n1kkid" target="_blank" rel="noopener noreferrer">Написать о Cortex <span aria-hidden="true">↗</span></a></div>
         </div>
         <aside class="purchase-note reveal">
-          <strong>Что обсудим</strong>
+          <strong>Перед запуском</strong>
           <ul>
-            <li>Вашу схему мерчантов и провайдеров</li>
-            <li>Валюты, методы оплаты и правила каскада</li>
-            <li>Развёртывание и необходимые интеграции</li>
+            <li>Какие мерчанты и провайдеры будут в системе</li>
+            <li>Как должен работать каскад</li>
+            <li>Где развернуть Cortex и что подключить</li>
           </ul>
         </aside>
       </div>
@@ -1084,12 +1065,12 @@
 
     <section class="faq">
       <div class="container faq-grid">
-        <div class="reveal"><span class="eyebrow">Коротко о главном</span><h2>Перед запуском</h2></div>
+        <div class="reveal"><span class="eyebrow">Вопросы</span><h2>Что стоит знать</h2></div>
         <div class="faq-list reveal">
-          <details><summary>Cortex — это ещё одна трейдерская панель?</summary><p>Нет. Cortex стоит между мерчантом и внешними платёжными провайдерами: принимает единый запрос, выбирает маршрут и контролирует сделку. Если нужна собственная площадка с трейдерами и реквизитами, переключитесь на WLTraders.</p></details>
-          <details><summary>Можно ли настроить разные каскады?</summary><p>Да. Есть общий каскад с приоритетными, параллельными и резервными этапами, а для проектов мерчантов можно задавать отдельные правила с возвратом к глобальным настройкам.</p></details>
-          <details><summary>Какие роли есть в системе?</summary><p>Администратор, поддержка, мерчант и провайдер. Каждый кабинет показывает только доступные ему разделы и данные.</p></details>
-          <details><summary>Где посмотреть рабочую версию?</summary><p>Откройте демо Cortex и войдите с данными, указанными в верхней части страницы.</p></details>
+          <details><summary>Cortex заменяет панель трейдеров?</summary><p>Нет. Cortex управляет внешними платёжными провайдерами. Если вам нужна площадка со своими трейдерами и реквизитами, выбирайте WLTraders.</p></details>
+          <details><summary>У каждого мерчанта может быть свой каскад?</summary><p>Да. Можно использовать общую схему или задать отдельный порядок провайдеров для конкретного проекта.</p></details>
+          <details><summary>Кто работает в системе?</summary><p>Администратор, поддержка, мерчант и провайдер. У каждой роли свой кабинет и доступ к своим данным.</p></details>
+          <details><summary>Где посмотреть Cortex?</summary><p>Откройте демо и войдите с логином и паролем из верхней части страницы.</p></details>
         </div>
       </div>
     </section>
@@ -1097,9 +1078,9 @@
     <section class="help" id="cascade-help">
       <div class="container help-card">
         <div class="help-copy reveal">
-          <span class="eyebrow">Приобрести Cortex</span>
-          <h2>Обсудим ваш платёжный контур</h2>
-          <p>Расскажите, с какими мерчантами, провайдерами, валютами и методами оплаты вы работаете. Я отвечу по формату приобретения и запуску.</p>
+          <span class="eyebrow">Связаться</span>
+          <h2>Есть вопросы по Cortex?</h2>
+          <p>Напишите, какие провайдеры у вас уже есть и как сейчас устроен приём платежей. Отвечу по продукту, интеграциям и запуску.</p>
           <div class="help-actions">
             <a class="button primary" href="https://t.me/n1kkid" target="_blank" rel="noopener noreferrer">Написать в Telegram <span aria-hidden="true">↗</span></a>
           </div>
