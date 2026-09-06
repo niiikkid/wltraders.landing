@@ -1,6 +1,11 @@
 # WLTraders Landing
 
-Одностраничный лендинг WLTraders — open source P2P-платформы для трейдерских команд, мерчантов и процессинга.
+Одностраничный лендинг двух связанных продуктов:
+
+- **WLTraders** — open source P2P-платформа для трейдерских команд, мерчантов и процессинга;
+- **Cortex** — коммерческий платёжный агрегатор с управляемым каскадом провайдеров.
+
+По умолчанию открывается WLTraders. Режим Cortex доступен по `?mode=cascade`; выбор сохраняется локально и восстанавливается при обновлении страницы.
 
 ## Локальный просмотр
 
@@ -42,7 +47,9 @@ python3 /opt/wltraders-landing/analytics_report.py
 
 ## Демо
 
-Рабочая демо-версия: [demo.wltraders.pro](https://demo.wltraders.pro/)
+WLTraders: [demo.wltraders.pro](https://demo.wltraders.pro/)
+
+Cortex: [cascade.wltraders.pro](https://cascade.wltraders.pro/)
 
 - Логин: `admin`
 - Пароль: `password`

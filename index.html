@@ -50,6 +50,9 @@
     }
 
     * { box-sizing: border-box; }
+    [hidden] { display: none !important; }
+    html:not([data-mode="cascade"]) .mode-cascade-only,
+    html[data-mode="cascade"] .mode-platform-only { display: none !important; }
     html { scroll-behavior: smooth; }
     body {
       margin: 0;
@@ -110,6 +113,41 @@
     .github-link:hover, .button:hover { transform: translateY(-2px); border-color: rgba(227, 239, 219, .28); background: var(--surface-2); }
     .button.primary { color: var(--accent-ink); background: var(--accent); border-color: var(--accent); }
     .button.primary:hover { background: var(--accent-strong); border-color: var(--accent-strong); }
+    .mode-switch {
+      position: relative;
+      isolation: isolate;
+      min-height: 46px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      flex: none;
+      padding: 0 20px;
+      border: 1px solid rgba(255,255,255,.2);
+      border-radius: 2px;
+      color: #fff;
+      background: linear-gradient(105deg, #5b3be0 0%, #8f27d6 48%, #bc1e86 100%);
+      box-shadow: 0 0 28px rgba(178, 75, 255, .3);
+      font-family: var(--display);
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: .07em;
+      line-height: 1;
+      text-transform: uppercase;
+      white-space: nowrap;
+      transition: transform .2s ease, box-shadow .2s ease, filter .2s ease;
+    }
+    .mode-switch::before {
+      content: "";
+      position: absolute;
+      z-index: -1;
+      inset: -1px;
+      border-radius: inherit;
+      background: inherit;
+      filter: blur(13px);
+      opacity: .38;
+    }
+    .mode-switch:hover { color: #fff; transform: translateY(-2px); filter: brightness(1.12); box-shadow: 0 0 38px rgba(178, 75, 255, .44); }
+    .mode-switch:focus-visible { outline-color: #d875ff; }
     .menu-button { display: none; width: 46px; height: 46px; padding: 0; border: 1px solid var(--line); border-radius: 50%; color: var(--ink); background: transparent; }
 
 
@@ -276,7 +314,7 @@
       .nav-links a { min-height: 46px; display: flex; align-items: center; padding: 0 12px; }
 
       .nav { gap: 10px; }
-      .nav .help-link { min-height: 42px; padding: 0 13px; font-size: 11px; }
+      .nav .mode-switch { min-height: 46px; padding: 0 13px; font-size: 10px; }
       .menu-button { display: grid; place-items: center; flex: none; }
       .hero { padding: 66px 0 60px; }
       h1 { font-size: clamp(43px, 12.5vw, 56px); }
@@ -296,7 +334,8 @@
     }
 
     @media (max-width: 420px) {
-      .brand > span:last-child { display: none; }
+      .brand > span:not(.brand-mark) { display: none; }
+      .nav .mode-switch { padding-inline: 10px; letter-spacing: .035em; }
     }
 
     @media (prefers-reduced-motion: reduce) {
@@ -395,7 +434,7 @@
     .reveal { opacity: 1; transform: none; }
 
     @media (max-width: 900px) {
-      .nav-links { border-radius: 2px; background: #08090c; box-shadow: none; }
+      .nav-links { border-radius: 2px; background: #08090c; box-shadow: 0 24px 55px rgba(0,0,0,.72); }
       .hero { min-height: auto; padding: 80px 0 86px; }
       .hero::before { width: 620px; right: -470px; }
       .hero::after { right: 11%; }
@@ -444,6 +483,119 @@
     @media (max-width: 900px) {
       .help { padding: 84px 0; }
       .help-contact .handle { font-size: 26px; }
+    }
+
+    /* Cortex cascade mode */
+    .cascade-main {
+      --cascade-violet: #9c6cff;
+      --cascade-pink: #ff4fbd;
+      --cascade-blue: #5799ff;
+    }
+    .cascade-main .eyebrow { color: rgba(222, 207, 255, .78); }
+    .cascade-main .eyebrow::before { background: var(--cascade-violet); box-shadow: 0 0 0 4px rgba(156,108,255,.13), 0 0 24px rgba(156,108,255,.4); }
+    .cascade-main .button.primary { color: #fff; border-color: #8157ef; background: linear-gradient(105deg, #5738c4, #8528c4 58%, #b3247e); }
+    .cascade-main .button.primary:hover { color: #fff; border-color: #b66cf5; background: linear-gradient(105deg, #6847e8, #9634dc 58%, #c92c8d); }
+    .cascade-hero {
+      background:
+        radial-gradient(circle at 75% 23%, rgba(145, 89, 255, .19), transparent 30%),
+        radial-gradient(circle at 15% 92%, rgba(70, 134, 255, .1), transparent 34%),
+        #000;
+    }
+    .cascade-hero h1 span {
+      color: transparent;
+      background: linear-gradient(105deg, #a989ff 0%, #e072ff 48%, #ff6fbd 100%);
+      -webkit-background-clip: text;
+      background-clip: text;
+    }
+    .cascade-hero h1 { font-size: clamp(50px, 5.4vw, 80px); }
+    .cascade-console {
+      position: relative;
+      align-self: center;
+      overflow: hidden;
+      min-width: 0;
+      padding: 10px;
+      border: 1px solid rgba(188,154,255,.28);
+      background: rgba(9,7,16,.82);
+      box-shadow: 0 35px 100px rgba(0,0,0,.45), 0 0 60px rgba(128,70,255,.12);
+    }
+    .cascade-console::before { content: ""; position: absolute; inset: 0; background: linear-gradient(135deg, rgba(156,108,255,.1), transparent 38%); pointer-events: none; }
+    .cascade-console__bar { height: 40px; display: flex; align-items: center; justify-content: space-between; gap: 20px; padding: 0 12px; border-bottom: 1px solid var(--line); color: rgba(240,240,250,.56); font: 11px/1 var(--display); letter-spacing: .1em; text-transform: uppercase; }
+    .cascade-console__status { display: inline-flex; align-items: center; gap: 7px; color: #dfcfff; }
+    .cascade-console__status::before { content: ""; width: 6px; height: 6px; border-radius: 50%; background: #b889ff; box-shadow: 0 0 12px #a66dff; }
+    .cascade-map { position: relative; display: grid; gap: 14px; padding: 28px 22px 23px; }
+    .cascade-route:not(:last-child)::after { content: "↓"; position: absolute; z-index: 2; left: 50%; bottom: -17px; color: #a97eff; font: 12px/1 var(--display); transform: translateX(-50%); }
+    .cascade-route { position: relative; display: grid; grid-template-columns: 96px minmax(0, 1fr) 78px; align-items: center; gap: 14px; min-height: 61px; padding: 10px 13px; border: 1px solid var(--line); background: rgba(240,240,250,.025); }
+    .cascade-route:nth-child(2) { border-color: rgba(156,108,255,.43); background: rgba(156,108,255,.07); }
+    .cascade-route__stage { color: rgba(240,240,250,.58); font: 11px/1.35 var(--display); letter-spacing: .08em; text-transform: uppercase; }
+    .cascade-route__providers { display: flex; gap: 7px; }
+    .cascade-route__providers i { width: 34px; height: 34px; display: grid; place-items: center; border: 1px solid rgba(240,240,250,.15); color: rgba(240,240,250,.76); background: #0d0e13; font: 11px/1 var(--display); font-style: normal; }
+    .cascade-route:nth-child(2) .cascade-route__providers i:first-child { color: #fff; border-color: #9c6cff; background: #50309b; box-shadow: 0 0 18px rgba(156,108,255,.3); }
+    .cascade-route__result { color: rgba(240,240,250,.55); font: 11px/1.35 var(--display); text-align: right; text-transform: uppercase; }
+    .cascade-route:nth-child(2) .cascade-route__result { color: #cfaeff; }
+    .cascade-console__foot { display: flex; justify-content: space-between; gap: 18px; padding: 0 22px 18px; color: rgba(240,240,250,.5); font: 11px/1.4 var(--display); }
+    .cascade-console__foot b { color: rgba(240,240,250,.78); font-weight: 500; }
+
+    .cascade-main .audience { background: #050409; }
+    .cascade-main .audience-card, .cascade-main .audience-card.dark { border-color: rgba(188,154,255,.18); background: linear-gradient(145deg, rgba(156,108,255,.075), rgba(240,240,250,.018)); }
+    .cascade-main .audience-card .number, .cascade-main .audience-card.dark .number { color: #b996ff; }
+    .cascade-main .capability .num { color: #b996ff; }
+    .cascade-main .flow { background: #030205; }
+    .cascade-main .flow-board { border-color: rgba(188,154,255,.2); background: #08060d; }
+    .cascade-main .flow-node.center { color: #fff; border-color: #875ce9; background: linear-gradient(135deg, #4e348d, #8e3f9c); }
+    .cascade-main .flow-node.center small, .cascade-main .flow-node.center p { color: rgba(255,255,255,.68); }
+    .cascade-main .flow-arrow { background: rgba(177,132,255,.52); }
+    .cascade-main .flow-arrow::after { border-color: #b890ff; }
+
+    .cascade-placeholder {
+      position: relative;
+      min-height: 440px;
+      display: grid;
+      place-items: center;
+      overflow: hidden;
+      padding: 42px;
+      border: 1px dashed rgba(188,154,255,.38);
+      background:
+        linear-gradient(rgba(156,108,255,.035) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(156,108,255,.035) 1px, transparent 1px),
+        #06050a;
+      background-size: 34px 34px;
+      text-align: center;
+    }
+    .cascade-placeholder::before { content: ""; position: absolute; width: 420px; height: 420px; border: 1px solid rgba(156,108,255,.15); border-radius: 50%; box-shadow: 0 0 0 75px rgba(156,108,255,.018), 0 0 0 150px rgba(156,108,255,.012); }
+    .cascade-placeholder__copy { position: relative; max-width: 560px; }
+    .cascade-placeholder__copy span { color: #b996ff; font: 11px/1 var(--display); letter-spacing: .16em; text-transform: uppercase; }
+    .cascade-placeholder__copy strong { display: block; margin-top: 18px; font: 400 clamp(27px, 4vw, 47px)/1.08 var(--display); letter-spacing: -.04em; }
+    .cascade-placeholder__copy p { margin: 17px auto 0; max-width: 470px; color: var(--muted); }
+
+    .commercial { color: var(--ink); border-block: 1px solid rgba(188,154,255,.2); background: radial-gradient(circle at 85% 30%, rgba(156,108,255,.18), transparent 34%), #07050c; }
+    .commercial .eyebrow { color: #c5a7ff; }
+    .commercial h2 { margin-top: 22px; max-width: 800px; font-size: clamp(46px, 6vw, 82px); line-height: .98; letter-spacing: -.055em; font-weight: 400; }
+    .commercial p { max-width: 620px; margin: 26px 0 0; color: var(--muted); font-size: 18px; }
+    .purchase-note { padding: 30px; border: 1px solid rgba(188,154,255,.25); background: rgba(156,108,255,.045); }
+    .purchase-note strong { display: block; color: #d7c3ff; font: 12px/1 var(--display); letter-spacing: .13em; text-transform: uppercase; }
+    .purchase-note ul { margin: 21px 0 0; padding: 0; list-style: none; color: rgba(240,240,250,.68); font-size: 15px; }
+    .purchase-note li { position: relative; padding: 10px 0 10px 22px; border-top: 1px solid rgba(240,240,250,.08); }
+    .purchase-note li::before { content: "↗"; position: absolute; left: 0; color: #b996ff; }
+
+    @media (max-width: 980px) {
+      .cascade-console { width: min(760px, 100%); }
+    }
+    @media (max-width: 900px) {
+      .cascade-hero h1 { font-size: clamp(42px, 11.5vw, 50px); }
+      .cascade-route { grid-template-columns: 72px minmax(0, 1fr); }
+      .cascade-route__result { grid-column: 2; text-align: left; }
+      .cascade-console__foot { flex-direction: column; gap: 5px; }
+      .cascade-placeholder { min-height: 350px; padding: 28px; }
+      .purchase-note { padding: 22px; }
+    }
+    @media (max-width: 520px) {
+      .cascade-map { padding-inline: 12px; }
+      .cascade-route { grid-template-columns: 1fr; gap: 9px; }
+      .cascade-route__result { grid-column: auto; }
+      .cascade-route__providers { flex-wrap: wrap; }
+      .cascade-console__bar { padding-inline: 6px; }
+      .cascade-console__foot { padding-inline: 12px; }
+      .cascade-placeholder { min-height: 310px; }
     }
   </style>
   <script type="application/ld+json">
@@ -514,24 +666,31 @@
 <body>
   <header class="site-header" id="top">
     <div class="container nav">
-      <a class="brand" href="#top" aria-label="WLTraders — в начало">
-        <span class="brand-mark">WL</span>
-        <span>WLTraders<small>P2P processing</small></span>
+      <a class="brand" href="#top" aria-label="WLTraders — в начало" data-brand-link>
+        <span class="brand-mark mode-platform-only">WL</span>
+        <span class="brand-mark mode-cascade-only">CX</span>
+        <span class="mode-platform-only">WLTraders<small>P2P processing</small></span>
+        <span class="mode-cascade-only">Cortex<small>Payment cascade</small></span>
       </a>
       <nav class="nav-links" id="nav-links" aria-label="Основная навигация">
-        <a href="#audience">Для кого</a>
-        <a href="#capabilities">Возможности</a>
-        <a href="#flow">Как работает</a>
-        <a href="#opensource">Исходный код</a>
+        <a class="mode-platform-only" href="#audience">Для кого</a>
+        <a class="mode-platform-only" href="#capabilities">Возможности</a>
+        <a class="mode-platform-only" href="#flow">Как работает</a>
+        <a class="mode-platform-only" href="#opensource">Исходный код</a>
+        <a class="mode-platform-only" href="#help">Связаться</a>
+        <a class="mode-cascade-only" href="#cascade-audience">Для кого</a>
+        <a class="mode-cascade-only" href="#cascade-capabilities">Возможности</a>
+        <a class="mode-cascade-only" href="#cascade-flow">Как работает</a>
+        <a class="mode-cascade-only" href="#cascade-purchase">Приобрести</a>
+        <a class="mode-cascade-only" href="#cascade-help">Связаться</a>
       </nav>
-      <a class="github-link help-link" href="#help">
-        Нужна помощь <span aria-hidden="true">?</span>
-      </a>
+      <a class="mode-switch mode-platform-only" href="?mode=cascade" data-switch-mode="cascade">Нужен каскад?</a>
+      <a class="mode-switch mode-cascade-only" href="./" data-switch-mode="platform">Нужен процессинг?</a>
       <button class="menu-button" type="button" aria-label="Открыть меню" aria-expanded="false" aria-controls="nav-links">☰</button>
     </div>
   </header>
 
-  <main>
+  <main class="mode-platform">
     <section class="hero">
       <canvas class="starfield" aria-hidden="true"></canvas>
       <div class="container">
@@ -695,7 +854,194 @@
     </section>
   </main>
 
-  <footer>
+  <main class="mode-cascade cascade-main" hidden>
+    <section class="hero cascade-hero">
+      <div class="container">
+        <div class="hero-head reveal">
+          <span class="eyebrow">Payment aggregator · Multi-provider</span>
+          <h1>Один API. <span>Весь каскад провайдеров.</span></h1>
+        </div>
+        <div class="hero-grid reveal">
+          <div class="hero-copy">
+            <p>Cortex принимает pay-in от мерчанта, запускает настроенный каскад и возвращает реквизиты первого провайдера, который прошёл правила цены и качества.</p>
+            <div class="hero-actions">
+              <a class="button primary" href="https://cascade.wltraders.pro/" target="_blank" rel="noopener noreferrer">Посмотреть демо <span aria-hidden="true">↗</span></a>
+              <a class="button" href="https://t.me/n1kkid" target="_blank" rel="noopener noreferrer">Приобрести <span aria-hidden="true">↗</span></a>
+            </div>
+            <div class="demo-access" aria-label="Данные для входа в демо-версию Cortex">
+              <span>Демо-доступ</span>
+              <span class="demo-credential"><small>Логин</small><code>admin</code></span>
+              <span class="demo-credential"><small>Пароль</small><code>password</code></span>
+            </div>
+          </div>
+
+          <div class="cascade-console" role="img" aria-label="Схема каскада: приоритетные, параллельные и резервные провайдеры">
+            <div class="cascade-console__bar"><span>Cortex / routing</span><span class="cascade-console__status">Каскад активен</span></div>
+            <div class="cascade-map">
+              <div class="cascade-route"><span class="cascade-route__stage">Приоритет</span><span class="cascade-route__providers"><i>P1</i><i>P2</i></span><span class="cascade-route__result">нет реквизитов</span></div>
+              <div class="cascade-route"><span class="cascade-route__stage">Параллельно</span><span class="cascade-route__providers"><i>P3</i><i>P4</i><i>P5</i></span><span class="cascade-route__result">маршрут найден</span></div>
+              <div class="cascade-route"><span class="cascade-route__stage">Резерв</span><span class="cascade-route__providers"><i>P6</i><i>P7</i></span><span class="cascade-route__result">не запущен</span></div>
+            </div>
+            <div class="cascade-console__foot"><span>Выбран: <b>Provider 3</b></span><span>Результат: <b>реквизиты выданы</b></span></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <div class="principles">
+      <div class="container principles-grid">
+        <div class="principle"><b>Единый API</b><span>Мерчант подключается к Cortex, а не к каждому провайдеру отдельно.</span></div>
+        <div class="principle"><b>Управляемый каскад</b><span>Приоритетные, параллельные и резервные маршруты настраиваются из панели.</span></div>
+        <div class="principle"><b>Полная история</b><span>Попытки, ответы, отмены, статусы и финансовые движения остаются в системе.</span></div>
+      </div>
+    </div>
+
+    <section class="audience" id="cascade-audience">
+      <div class="container">
+        <div class="section-head reveal">
+          <span class="eyebrow">Для кого</span>
+          <div>
+            <h2>Когда одного провайдера уже недостаточно</h2>
+            <p>Cortex нужен командам, которые принимают P2P-платежи через несколько внешних провайдеров и хотят управлять маршрутизацией из одного контура.</p>
+          </div>
+        </div>
+        <div class="audience-grid">
+          <article class="audience-card dark reveal">
+            <span class="number">01 · Мерчанты с несколькими провайдерами</span>
+            <div>
+              <h3>Один контракт API вместо набора разных интеграций</h3>
+              <p>Создавайте pay-in через Cortex, меняйте порядок и состав провайдеров без переделки мерчантской интеграции.</p>
+            </div>
+          </article>
+          <article class="audience-card reveal">
+            <span class="number">02 · Платёжные команды и агрегаторы</span>
+            <div>
+              <h3>Свой контроль маршрутов, маржи и качества</h3>
+              <p>Управляйте провайдерами, реквизитами, спорами, обеспечением и операционными рисками в собственной системе.</p>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section id="cascade-capabilities">
+      <div class="container system-layout">
+        <div class="system-intro reveal">
+          <span class="eyebrow">Внутри Cortex</span>
+          <h2>Каскад — это только начало.</h2>
+          <p>Платформа связывает API мерчанта, внешних провайдеров, финансы и операционную команду. Решение по каждой сделке можно проследить от запроса до результата.</p>
+        </div>
+        <div class="capability-list reveal">
+          <article class="capability"><span class="num">01</span><div><h3>Три уровня маршрутизации</h3><p>Приоритетные провайдеры, параллельные группы и резервная очередь. Первый подходящий ответ становится победителем, остальные сделки отменяются.</p></div></article>
+          <article class="capability"><span class="num">02</span><div><h3>Правила для каждого мерчанта</h3><p>Общий каскад дополняется отдельными настройками проектов, лимитами ожидания и разрешёнными провайдерами.</p></div></article>
+          <article class="capability"><span class="num">03</span><div><h3>Цена и качество реквизитов</h3><p>Cortex проверяет фактическую цену провайдера, поддерживаемую пару, блокировки и показатели реквизита до выбора маршрута.</p></div></article>
+          <article class="capability"><span class="num">04</span><div><h3>Сделки, споры и документы</h3><p>Pay-in, статусы, изменение суммы, чеки и решения по спорам доступны в одном рабочем интерфейсе.</p></div></article>
+          <article class="capability"><span class="num">05</span><div><h3>Балансы и сверка обеспечения</h3><p>Кошельки и ledger показывают движение средств, а сверка сопоставляет финальные сделки с данными провайдера.</p></div></article>
+          <article class="capability"><span class="num">06</span><div><h3>Логи, аудит и уведомления</h3><p>Журналы H2H-запросов и действий пользователей помогают расследовать операции, а Telegram сообщает о важных событиях.</p></div></article>
+        </div>
+      </div>
+    </section>
+
+    <section class="flow" id="cascade-flow">
+      <div class="container">
+        <div class="section-head reveal">
+          <span class="eyebrow">Как это работает</span>
+          <div><h2>Мерчант видит один простой маршрут</h2><p>Внутренняя гонка провайдеров остаётся внутри Cortex. Наружу возвращается понятный результат: реквизиты, контролируемый отказ или таймаут.</p></div>
+        </div>
+        <div class="flow-board reveal">
+          <div class="flow-row">
+            <article class="flow-node"><small>Один запрос</small><div><h3>Мерчант</h3><p>Создаёт pay-in через единый H2H API.</p></div></article>
+            <span class="flow-arrow" aria-hidden="true"></span>
+            <article class="flow-node center"><small>Маршрутизация</small><div><h3>Cortex</h3><p>Запускает каскад и проверяет каждый ответ.</p></div></article>
+            <span class="flow-arrow" aria-hidden="true"></span>
+            <article class="flow-node"><small>Исполнение</small><div><h3>Провайдеры</h3><p>Первый подходящий маршрут отдаёт реквизиты.</p></div></article>
+          </div>
+          <p class="flow-caption">Поздние и проигравшие попытки отменяются отдельно и не меняют результат мерчанта.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="preview" id="cascade-preview">
+      <div class="container">
+        <div class="section-head reveal">
+          <span class="eyebrow">Интерфейс</span>
+          <div><h2>Все роли в одной панели</h2><p>Администратор, поддержка, мерчант и провайдер получают свои разделы, данные и действия.</p></div>
+        </div>
+        <div class="preview-wrap reveal">
+          <div class="preview-frame">
+            <div class="cascade-placeholder" aria-label="Зарезервированное место для будущих скриншотов Cortex">
+              <div class="cascade-placeholder__copy">
+                <span>Место для изображений</span>
+                <strong>Скриншоты Cortex появятся здесь</strong>
+                <p>Блок уже подготовлен под карусель экранов. Изображения можно будет добавить отдельно, не меняя структуру страницы.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="commercial" id="cascade-purchase">
+      <div class="container open-grid">
+        <div class="reveal">
+          <span class="eyebrow">Коммерческий продукт</span>
+          <h2>Приобрести Cortex для своей команды</h2>
+          <p>Cortex доступен как коммерческий продукт. Напишите напрямую, чтобы обсудить формат приобретения, запуск и нужные интеграции.</p>
+          <div class="hero-actions"><a class="button primary" href="https://t.me/n1kkid" target="_blank" rel="noopener noreferrer">Обсудить приобретение <span aria-hidden="true">↗</span></a></div>
+        </div>
+        <aside class="purchase-note reveal">
+          <strong>Что обсудим</strong>
+          <ul>
+            <li>Вашу схему мерчантов и провайдеров</li>
+            <li>Валюты, методы оплаты и правила каскада</li>
+            <li>Развёртывание и необходимые интеграции</li>
+          </ul>
+        </aside>
+      </div>
+    </section>
+
+    <section class="faq">
+      <div class="container faq-grid">
+        <div class="reveal"><span class="eyebrow">Коротко о главном</span><h2>Перед запуском</h2></div>
+        <div class="faq-list reveal">
+          <details><summary>Cortex — это ещё одна трейдерская панель?</summary><p>Нет. Cortex стоит между мерчантом и внешними платёжными провайдерами: принимает единый запрос, выбирает маршрут и контролирует сделку. Если нужна собственная площадка с трейдерами и реквизитами, переключитесь на WLTraders.</p></details>
+          <details><summary>Можно ли настроить разные каскады?</summary><p>Да. Есть общий каскад с приоритетными, параллельными и резервными этапами, а для проектов мерчантов можно задавать отдельные правила с возвратом к глобальным настройкам.</p></details>
+          <details><summary>Какие роли есть в системе?</summary><p>Администратор, поддержка, мерчант и провайдер. Каждый кабинет показывает только доступные ему разделы и данные.</p></details>
+          <details><summary>Где посмотреть рабочую версию?</summary><p>Откройте демо Cortex и войдите с данными, указанными в верхней части страницы.</p></details>
+        </div>
+      </div>
+    </section>
+
+    <section class="help" id="cascade-help">
+      <div class="container help-card">
+        <div class="help-copy reveal">
+          <span class="eyebrow">Приобрести Cortex</span>
+          <h2>Обсудим ваш платёжный контур</h2>
+          <p>Расскажите, с какими мерчантами, провайдерами, валютами и методами оплаты вы работаете. Я отвечу по формату приобретения и запуску.</p>
+          <div class="help-actions">
+            <a class="button primary" href="https://t.me/n1kkid" target="_blank" rel="noopener noreferrer">Написать в Telegram <span aria-hidden="true">↗</span></a>
+          </div>
+        </div>
+        <a class="help-contact reveal" href="https://t.me/n1kkid" target="_blank" rel="noopener noreferrer">
+          <span class="label">Telegram</span>
+          <span class="handle">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z" fill="currentColor"/></svg>
+            <span>@n1kkid</span>
+          </span>
+          <p>Вопросы по приобретению, запуску и интеграциям Cortex.</p>
+        </a>
+      </div>
+    </section>
+  </main>
+
+  <footer class="mode-cascade-footer" hidden>
+    <div class="container footer-row">
+      <div>Cortex · Payment provider cascade</div>
+      <div class="footer-links"><a href="#top">Наверх ↑</a><a href="https://cascade.wltraders.pro/" target="_blank" rel="noopener noreferrer">Демо ↗</a><a href="#cascade-purchase">Приобрести</a><a href="https://t.me/n1kkid" target="_blank" rel="noopener noreferrer">Telegram ↗</a></div>
+    </div>
+  </footer>
+
+  <footer class="mode-platform-footer">
     <div class="container footer-row">
       <div>WLTraders · Open source P2P processing platform</div>
       <div class="footer-links"><a href="#top">Наверх ↑</a><a href="https://demo.wltraders.pro/" target="_blank" rel="noopener noreferrer">Демо ↗</a><a href="#help">Нужна помощь</a><a href="https://github.com/niiikkid/wl.traders.p2p" target="_blank" rel="noopener noreferrer">GitHub ↗</a></div>
@@ -826,6 +1172,88 @@
     const header = document.querySelector('.site-header');
     const menuButton = document.querySelector('.menu-button');
     const navLinks = document.querySelector('.nav-links');
+    const platformMain = document.querySelector('.mode-platform');
+    const cascadeMain = document.querySelector('.mode-cascade');
+    const platformFooter = document.querySelector('.mode-platform-footer');
+    const cascadeFooter = document.querySelector('.mode-cascade-footer');
+    const brandLink = document.querySelector('[data-brand-link]');
+    const descriptionMeta = document.querySelector('meta[name="description"]');
+    const ogTitleMeta = document.querySelector('meta[property="og:title"]');
+    const ogDescriptionMeta = document.querySelector('meta[property="og:description"]');
+    const twitterTitleMeta = document.querySelector('meta[name="twitter:title"]');
+    const twitterDescriptionMeta = document.querySelector('meta[name="twitter:description"]');
+    const MODE_STORAGE_KEY = 'wltraders-landing-mode';
+    const MODE_META = {
+      platform: {
+        title: 'WLTraders — open source P2P-процессинг для своей площадки',
+        description: 'WLTraders — self-hosted P2P-процессинг с открытым исходным кодом для команд, которые хотят запустить собственную площадку для приёма платежей и выплат.',
+        ogTitle: 'WLTraders — своя P2P-площадка на своих правилах',
+        brandLabel: 'WLTraders — в начало'
+      },
+      cascade: {
+        title: 'Cortex — каскад платёжных провайдеров для P2P-процессинга',
+        description: 'Cortex соединяет мерчанта с несколькими платёжными провайдерами: единый API, управляемый каскад, pay-in, споры, балансы и полный контроль операций.',
+        ogTitle: 'Cortex — один API для каскада платёжных провайдеров',
+        brandLabel: 'Cortex — в начало'
+      }
+    };
+
+    const readStoredMode = () => {
+      try { return localStorage.getItem(MODE_STORAGE_KEY); }
+      catch { return null; }
+    };
+
+    const storeMode = mode => {
+      try { localStorage.setItem(MODE_STORAGE_KEY, mode); }
+      catch { /* URL remains the source of truth when storage is unavailable. */ }
+    };
+
+    const getInitialMode = () => {
+      const explicit = new URLSearchParams(location.search).get('mode');
+      if (explicit === 'cascade' || explicit === 'platform') return explicit;
+      return readStoredMode() === 'cascade' ? 'cascade' : 'platform';
+    };
+
+    const closeMenu = () => {
+      navLinks.classList.remove('open');
+      menuButton.setAttribute('aria-expanded', 'false');
+      menuButton.textContent = '☰';
+    };
+
+    const applyMode = (mode, { updateHistory = false, replaceHistory = false, scrollToTop = false, moveFocus = false } = {}) => {
+      const next = mode === 'cascade' ? 'cascade' : 'platform';
+      const meta = MODE_META[next];
+
+      document.documentElement.dataset.mode = next;
+      platformMain.hidden = next !== 'platform';
+      platformFooter.hidden = next !== 'platform';
+      cascadeMain.hidden = next !== 'cascade';
+      cascadeFooter.hidden = next !== 'cascade';
+      document.title = meta.title;
+      descriptionMeta.content = meta.description;
+      ogTitleMeta.content = meta.ogTitle;
+      ogDescriptionMeta.content = meta.description;
+      twitterTitleMeta.content = meta.ogTitle;
+      twitterDescriptionMeta.content = meta.description;
+      brandLink.setAttribute('aria-label', meta.brandLabel);
+      storeMode(next);
+      closeMenu();
+
+      if (updateHistory || replaceHistory) {
+        const url = new URL(location.href);
+        if (next === 'cascade') url.searchParams.set('mode', 'cascade');
+        else url.searchParams.delete('mode');
+        if (scrollToTop) url.hash = '';
+        const method = replaceHistory ? 'replaceState' : 'pushState';
+        history[method]({ mode: next }, '', `${url.pathname}${url.search}${url.hash}`);
+      }
+
+      if (scrollToTop) window.scrollTo({ top: 0, behavior: reducedMotion ? 'auto' : 'smooth' });
+      if (moveFocus) {
+        const reverseSwitch = document.querySelector(`[data-switch-mode="${next === 'cascade' ? 'platform' : 'cascade'}"]`);
+        reverseSwitch.focus({ preventScroll: true });
+      }
+    };
 
     addEventListener('scroll', () => header.classList.toggle('scrolled', scrollY > 8), { passive: true });
     menuButton.addEventListener('click', () => {
@@ -835,13 +1263,23 @@
     });
     navLinks.addEventListener('click', event => {
       if (event.target.matches('a')) {
-        navLinks.classList.remove('open');
-        menuButton.setAttribute('aria-expanded', 'false');
-        menuButton.textContent = '☰';
+        closeMenu();
       }
     });
 
     const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
+    document.querySelectorAll('[data-switch-mode]').forEach(link => {
+      link.addEventListener('click', event => {
+        event.preventDefault();
+        applyMode(link.dataset.switchMode, { updateHistory: true, scrollToTop: true, moveFocus: true });
+      });
+    });
+    addEventListener('popstate', () => {
+      const explicit = new URLSearchParams(location.search).get('mode');
+      applyMode(explicit === 'cascade' ? 'cascade' : 'platform');
+    });
+    applyMode(getInitialMode(), { replaceHistory: true });
+
     if (reducedMotion || !('IntersectionObserver' in window)) {
       document.querySelectorAll('.reveal').forEach(el => el.classList.add('visible'));
     } else {
