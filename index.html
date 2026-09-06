@@ -629,6 +629,9 @@
     .purchase-note { border-color: var(--cascade-blue-border); background: var(--cascade-blue-soft); }
     .purchase-note strong { color: #bae6fd; }
     .purchase-note li::before { color: #38bdf8; }
+    .cascade-screen-viewer { border-color: var(--cascade-blue-border); background: #091218; box-shadow: 0 35px 100px rgb(0 0 0 / .45), 0 0 60px rgb(56 189 248 / .1); }
+    .cascade-screen-viewer .screen-stage { aspect-ratio: 1600 / 648; }
+    .cascade-screen-viewer .screen-stage img { filter: none; }
 
     @media (max-width: 980px) {
       .cascade-console { width: min(760px, 100%); }
@@ -928,14 +931,14 @@
             </div>
           </div>
 
-          <div class="cascade-console" role="img" aria-label="Схема каскада: приоритетные, параллельные и резервные провайдеры">
-            <div class="cascade-console__bar"><span>Cortex / routing</span><span class="cascade-console__status">Каскад активен</span></div>
-            <div class="cascade-map">
-              <div class="cascade-route"><span class="cascade-route__stage">Приоритет</span><span class="cascade-route__providers"><i>P1</i><i>P2</i></span><span class="cascade-route__result">нет реквизитов</span></div>
-              <div class="cascade-route"><span class="cascade-route__stage">Параллельно</span><span class="cascade-route__providers"><i>P3</i><i>P4</i><i>P5</i></span><span class="cascade-route__result">маршрут найден</span></div>
-              <div class="cascade-route"><span class="cascade-route__stage">Резерв</span><span class="cascade-route__providers"><i>P6</i><i>P7</i></span><span class="cascade-route__result">не запущен</span></div>
-            </div>
-            <div class="cascade-console__foot"><span>Выбран: <b>Provider 3</b></span><span>Результат: <b>реквизиты выданы</b></span></div>
+          <div class="screen-viewer cascade-screen-viewer" role="group" aria-label="Скриншоты интерфейса Cortex">
+            <button class="screen-stage" type="button" aria-label="Показать следующий скриншот интерфейса Cortex">
+              <img src="assets/cascade-screens/1.jpg" alt="Панель управления Cortex" width="1600" height="648" class="active" decoding="async" fetchpriority="high" aria-hidden="false">
+              <img src="assets/cascade-screens/2.jpg" alt="Настройки каскада провайдеров Cortex" width="1600" height="648" decoding="async" aria-hidden="true">
+              <img src="assets/cascade-screens/3.jpg" alt="Создание интеграции в Cortex" width="1600" height="648" decoding="async" aria-hidden="true">
+              <img src="assets/cascade-screens/4.jpg" alt="Создание мерчанта в Cortex" width="1600" height="648" decoding="async" aria-hidden="true">
+              <img src="assets/cascade-screens/5.jpg" alt="Настройка нового каскада в Cortex" width="1600" height="648" decoding="async" aria-hidden="true">
+            </button>
           </div>
         </div>
       </div>
@@ -1347,8 +1350,7 @@
       document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
     }
 
-    const stage = document.querySelector('.screen-stage');
-    if (stage) {
+    document.querySelectorAll('.screen-stage').forEach(stage => {
       const slides = stage.querySelectorAll('img');
       let current = 0;
       let timer = null;
@@ -1372,7 +1374,7 @@
       });
       updateStageLabel();
       if (!reducedMotion) timer = setInterval(next, 4000);
-    }
+    });
   </script>
 </body>
 </html>
