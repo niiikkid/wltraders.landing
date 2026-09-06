@@ -148,6 +148,20 @@
     }
     .mode-switch:hover { color: #09090b; border-color: #7dd3fc; background: #7dd3fc; transform: translateY(-2px); filter: none; box-shadow: 0 0 38px rgb(56 189 248 / .28); }
     .mode-switch:focus-visible { outline-color: #38bdf8; }
+    .mode-switch.mode-cascade-only {
+      --color-primary: oklch(86.133% .141 139.549);
+      color: #09090b;
+      border-color: var(--color-primary);
+      background: var(--color-primary);
+      box-shadow: 0 0 28px color-mix(in srgb, var(--color-primary) 30%, transparent);
+    }
+    .mode-switch.mode-cascade-only:hover {
+      color: #09090b;
+      border-color: var(--color-primary);
+      background: var(--color-primary);
+      box-shadow: 0 0 38px color-mix(in srgb, var(--color-primary) 42%, transparent);
+    }
+    .mode-switch.mode-cascade-only:focus-visible { outline-color: var(--color-primary); }
     .menu-button { display: none; width: 46px; height: 46px; padding: 0; border: 1px solid var(--line); border-radius: 50%; color: var(--ink); background: transparent; }
 
 
