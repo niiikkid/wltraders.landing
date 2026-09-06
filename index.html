@@ -122,11 +122,11 @@
       justify-content: center;
       flex: none;
       padding: 0 20px;
-      border: 1px solid rgba(255,255,255,.2);
+      border: 1px solid #38bdf8;
       border-radius: 2px;
-      color: #fff;
-      background: linear-gradient(105deg, #5b3be0 0%, #8f27d6 48%, #bc1e86 100%);
-      box-shadow: 0 0 28px rgba(178, 75, 255, .3);
+      color: #09090b;
+      background: #38bdf8;
+      box-shadow: 0 0 28px rgb(56 189 248 / .2);
       font-family: var(--display);
       font-size: 12px;
       font-weight: 600;
@@ -146,8 +146,8 @@
       filter: blur(13px);
       opacity: .38;
     }
-    .mode-switch:hover { color: #fff; transform: translateY(-2px); filter: brightness(1.12); box-shadow: 0 0 38px rgba(178, 75, 255, .44); }
-    .mode-switch:focus-visible { outline-color: #d875ff; }
+    .mode-switch:hover { color: #09090b; border-color: #7dd3fc; background: #7dd3fc; transform: translateY(-2px); filter: none; box-shadow: 0 0 38px rgb(56 189 248 / .28); }
+    .mode-switch:focus-visible { outline-color: #38bdf8; }
     .menu-button { display: none; width: 46px; height: 46px; padding: 0; border: 1px solid var(--line); border-radius: 50%; color: var(--ink); background: transparent; }
 
 
@@ -576,6 +576,44 @@
     .purchase-note ul { margin: 21px 0 0; padding: 0; list-style: none; color: rgba(240,240,250,.68); font-size: 15px; }
     .purchase-note li { position: relative; padding: 10px 0 10px 22px; border-top: 1px solid rgba(240,240,250,.08); }
     .purchase-note li::before { content: "↗"; position: absolute; left: 0; color: #b996ff; }
+
+    /* Cortex palette: the real interface uses a restrained sky-blue accent. */
+    .cascade-main {
+      --cascade-violet: #38bdf8;
+      --cascade-pink: #38bdf8;
+      --cascade-blue: #38bdf8;
+      --cascade-blue-hover: #7dd3fc;
+      --cascade-blue-soft: rgb(56 189 248 / .1);
+      --cascade-blue-border: rgb(56 189 248 / .35);
+    }
+    .cascade-main .eyebrow { color: #7dd3fc; }
+    .cascade-main .eyebrow::before { background: #38bdf8; box-shadow: 0 0 0 4px rgb(56 189 248 / .1), 0 0 24px rgb(56 189 248 / .25); }
+    .cascade-main .button.primary { color: #09090b; border-color: #38bdf8; background: #38bdf8; }
+    .cascade-main .button.primary:hover { color: #09090b; border-color: #7dd3fc; background: #7dd3fc; }
+    .cascade-hero { background: radial-gradient(circle at 75% 23%, rgb(56 189 248 / .14), transparent 30%), #000; }
+    .cascade-hero h1 span { color: #38bdf8; background: none; -webkit-background-clip: initial; background-clip: initial; }
+    .cascade-console { border-color: var(--cascade-blue-border); background: #091218; box-shadow: 0 35px 100px rgb(0 0 0 / .45), 0 0 60px rgb(56 189 248 / .1); }
+    .cascade-console::before { background: rgb(56 189 248 / .035); }
+    .cascade-console__status { color: #bae6fd; }
+    .cascade-console__status::before { background: #38bdf8; box-shadow: 0 0 12px #38bdf8; }
+    .cascade-route:not(:last-child)::after { color: #38bdf8; }
+    .cascade-route:nth-child(2) { border-color: var(--cascade-blue-border); background: var(--cascade-blue-soft); }
+    .cascade-route:nth-child(2) .cascade-route__providers i:first-child { color: #09090b; border-color: #38bdf8; background: #38bdf8; box-shadow: 0 0 18px rgb(56 189 248 / .25); }
+    .cascade-route:nth-child(2) .cascade-route__result { color: #bae6fd; }
+    .cascade-main .audience-card, .cascade-main .audience-card.dark { border-color: var(--cascade-blue-border); background: #0b1218; }
+    .cascade-main .audience-card .number, .cascade-main .audience-card.dark .number, .cascade-main .capability .num { color: #38bdf8; }
+    .cascade-main .flow-board { border-color: var(--cascade-blue-border); background: #071016; }
+    .cascade-main .flow-node.center { color: #09090b; border-color: #38bdf8; background: #38bdf8; }
+    .cascade-main .flow-arrow { background: rgb(56 189 248 / .52); }
+    .cascade-main .flow-arrow::after { border-color: #38bdf8; }
+    .cascade-placeholder { border-color: var(--cascade-blue-border); background: #060d12; }
+    .cascade-placeholder::before { border-color: rgb(56 189 248 / .15); box-shadow: 0 0 0 75px rgb(56 189 248 / .018), 0 0 0 150px rgb(56 189 248 / .012); }
+    .cascade-placeholder__copy span { color: #38bdf8; }
+    .commercial { border-color: var(--cascade-blue-border); background: #071016; }
+    .commercial .eyebrow { color: #7dd3fc; }
+    .purchase-note { border-color: var(--cascade-blue-border); background: var(--cascade-blue-soft); }
+    .purchase-note strong { color: #bae6fd; }
+    .purchase-note li::before { color: #38bdf8; }
 
     @media (max-width: 980px) {
       .cascade-console { width: min(760px, 100%); }
